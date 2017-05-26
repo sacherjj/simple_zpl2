@@ -17,7 +17,7 @@ class NetworkPrinter(object):
         self.ip = ip_address
         self.port = port
 
-    def print(self, label_formatter: Formatter, timeout=10):
+    def print(self, label_formatter, timeout=10):
         """
         Send ZPL2 formatted text to a network label printer
         
