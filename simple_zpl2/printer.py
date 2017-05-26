@@ -7,11 +7,11 @@ class NetworkPrinter(object):
     Object to send ZPL to zebra network printer using sockets
     """
 
-    def __init__(self, ip_address: str, port: int =9100) -> None:
+    def __init__(self, ip_address, port=9100):
         self.ip = ip_address
         self.port = port
 
-    def print(self, label_formatter: Formatter, timeout: int =10) -> None:
+    def print(self, label_formatter: Formatter, timeout=10):
         """
         Send ZPL2 formatted text to a network label printer
         
