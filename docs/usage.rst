@@ -12,4 +12,4 @@ To use Simple ZPL2 in a project::
     zpl.add_field_data('This is data inside a QR code.  This is a barcode often read by cell phones.')
 
     prn = NetworkPrinter('192.168.40.1')
-    prn.print(zpl)
+    prn.print_zpl(zpl)
