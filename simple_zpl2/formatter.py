@@ -5,7 +5,7 @@ import requests
 
 def _newline_after(func):
     """
-    append a newline after the function
+    Decorator to append a newline after the function
     """
 
     @wraps(func)
@@ -40,24 +40,20 @@ class Formatter(object):
     #: Ending block in ZPL2 document.  Added automatically
     END = '^XZ'
 
-    #: Orientation Values
     ORIENTATION_NORMAL = 'N'
     ORIENTATION_90 = 'R'
     ORIENTATION_180 = 'I'
     ORIENTATION_270 = 'B'
 
-    #: Justification Values
     JUSTIFICATION_LEFT = 0
     JUSTIFICATION_RIGHT = 1
     JUSTIFICATION_AUTO = 2
 
-    #: Text Justification Values
     TEXT_JUSTIFICATION_LEFT = 'L'
     TEXT_JUSTIFICATION_CENTER = 'C'
     TEXT_JUSTIFICATION_RIGHT = 'R'
     TEXT_JUSTIFICATION_JUSTIFIED = 'J'
 
-    #: QR Error Correction Values
     QR_ERROR_CORRECTION_ULTRA_HIGH = 'H'
     QR_ERROR_CORRECTION_HIGH = 'Q'
     QR_ERROR_CORRECTION_STANDARD = 'M'
@@ -438,8 +434,12 @@ class Formatter(object):
 
         Characters to encode (0-9 and -)
 
-        :param orientation: 'N' - normal, 'R' - rotate 90, 'I' - inverted, 'B' - rotate 270
-        :param check_digit: 'Y' - 1 digit, 'N' - 2 digits
+        :param orientation: * 'N' - normal
+                            * 'R' - rotate 90
+                            * 'I' - inverted
+                            * 'B' - rotate 270
+        :param check_digit: * 'Y' - 1 digit
+                            * 'N' - 2 digits
         :param height: bar code height in dots (1 to 32000)
         :param print_text: print text of data ('Y', 'N')
         :param text_above: print text above barcode ('Y', 'N')
@@ -458,7 +458,10 @@ class Formatter(object):
 
         Characters to encode (0-9)
 
-        :param orientation: 'N' - normal, 'R' - rotate 90, 'I' - inverted, 'B' - rotate 270
+        :param orientation: * 'N' - normal
+                            * 'R' - rotate 90
+                            * 'I' - inverted
+                            * 'B' - rotate 270
         :param height: bar code height in dots (1 to 32000)
         :param print_text: print text of data ('Y', 'N')
         :param text_above: print text above barcode ('Y', 'N')
@@ -467,6 +470,14 @@ class Formatter(object):
         self._add_standard_1d_barcode('B2', orientation, None, height, print_text, text_above, check_digit)
 
     def add_field_data_code_39(self, data, extended_ascii=False):
+        """
+        Add field data for code 39 barcode
+        
+        :param data: Data to encode 
+        :param extended_ascii: Boolean for extended ascii support
+        
+        .. todo:: Implement Code 39 translation for extended ascii
+        """
         normal_set = '01234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ-.$/+% '
         if extended_ascii:
             # TODO Add Code 39 translation of ASCII to valid chars
@@ -1354,36 +1365,47 @@ class Formatter(object):
         """
         TLC39 Bar Code (^BT)
 
-        :param orientation: 'N' - normal, 'R' - rotate 90, 'I' - inverted, 'B' - rotate 270
+        :param orientation: * 'N' - normal
+                            * 'R' - rotate 90
+                            * 'I' - inverted
+                            * 'B' - rotate 270
         :param code_39_width: width of the Code 39 bar code 1-10
         :param code_39_ratio: wide to narrow bar width ratio of Code 39 bar code 2.0-3.0 by 0.1
         :param code_39_height: height of the Code 39 bar code 1-9999
         :param micropdf417_height: height of MicroPDF417 bar code 1-255
         :param micropdf417_width: width of MicroPDF417 bar code 1-10
 
-        ECI Number.
-            If the seventh character is not a comma, only Code 39 prints. This means if
-            more than 6 digits are present, Code 39 prints for the first six digits (and no Micro-PDF
-            symbol is printed).
-            • Must be 6 digits.
-            • Firmware generates invalid character error if the firmware sees anything but 6 digits.
-            • This number is not padded.
+        .. note::
 
-        Serial number.
-            The serial number can contain up to 25 characters and is variable length.
-            The serial number is stored in the Micro-PDF symbol. If a comma follows the serial
-            number, then additional data is used below.
-            • If present, must be alphanumeric (letters and numbers, no punctuation).
-            This value is used if a comma follows the ECI number.
+            ECI Number.
 
-        Additional data.
-            If present, it is used for things such as a country code.
-            Data cannot exceed 150 bytes. This includes serial number commas.
-            • Additional data is stored in the Micro-PDF symbol and appended after the
-            serial number. A comma must exist between each maximum of 25 characters
-            in the additional fields.
-            • Additional data fields can contain up to 25 alphanumeric characters per field.
-        """
+                If the seventh character is not a comma, only Code 39 prints. This means if
+                more than 6 digits are present, Code 39 prints for the first six digits (and no Micro-PDF
+                symbol is printed).
+
+                * Must be 6 digits.
+                * Firmware generates invalid character error if the firmware sees anything but 6 digits.
+                * This number is not padded.
+
+            Serial number.
+    
+                The serial number can contain up to 25 characters and is variable length.
+                The serial number is stored in the Micro-PDF symbol. If a comma follows the serial
+                number, then additional data is used below.
+
+                * If present, must be alphanumeric (letters and numbers, no punctuation).
+                  This value is used if a comma follows the ECI number.
+
+            Additional data.
+    
+                If present, it is used for things such as a country code.
+                Data cannot exceed 150 bytes. This includes serial number commas.
+    
+                * Additional data is stored in the Micro-PDF symbol and appended after the
+                  serial number. A comma must exist between each maximum of 25 characters
+                  in the additional fields.
+                * Additional data fields can contain up to 25 alphanumeric characters per field.
+            """
         self.zpl.append('^BT')
 
         if orientation is None:
@@ -1421,7 +1443,10 @@ class Formatter(object):
         """
         UPC-A Bar Code (^BU)
 
-        :param orientation: 'N' - normal, 'R' - rotate 90, 'I' - inverted, 'B' - rotate 270
+        :param orientation: * 'N' - normal
+                            * 'R' - rotate 90
+                            * 'I' - inverted
+                            * 'B' - rotate 270
         :param height: bar code height in dots (1 to 9999)
         :param print_text: print text of data ('Y', 'N')
         :param text_above: print text above barcode ('Y', 'N')
@@ -1492,26 +1517,26 @@ class Formatter(object):
             Quality 000 to 140
         
                 * The \& and || can be used to insert carriage returns, line feeds, and the backslash, similar to the
-                PDF417. Other characters in the control character range can be inserted only by using ^FH.
-                Field data is limited to 596 characters for quality 0 to 140. Excess field data causes no symbol to
-                print; if ^CV is active, INVALID-L prints. The field data must correspond to a user-specified
-                format ID or no symbol prints; if ^CV is active, INVALID-C prints.
+                  PDF417. Other characters in the control character range can be inserted only by using ^FH.
+                  Field data is limited to 596 characters for quality 0 to 140. Excess field data causes no symbol to
+                  print; if ^CV is active, INVALID-L prints. The field data must correspond to a user-specified
+                  format ID or no symbol prints; if ^CV is active, INVALID-C prints.
                 
                 * The maximum field sizes for quality 0 to 140 symbols are shown in the tktable in the g parameter.
             
             Quality 200
             
                 * If more than 3072 bytes are supplied as field data, it is truncated to 3072 bytes. This limits the
-                maximum size of a numeric Data Matrix symbol to less than the 3116 numeric characters that
-                the specification would allow. The maximum alphanumeric capacity is 2335 and the maximum
-                8-bit byte capacity is 1556.
+                  maximum size of a numeric Data Matrix symbol to less than the 3116 numeric characters that
+                  the specification would allow. The maximum alphanumeric capacity is 2335 and the maximum
+                  8-bit byte capacity is 1556.
                 
                 * If ^FH is used, field hexadecimal processing takes place before the escape sequence
-                processing described below.
+                  processing described below.
                 
                 * The underscore is the default escape sequence control character for quality 200 field data. A
-                different escape sequence control character can be selected by using parameter g in the ^BX
-                command.
+                  different escape sequence control character can be selected by using parameter g in the ^BX
+                  command.
                 
                 The information that follows applies to firmware version: V60.13.0.12, V60.13.0.12Z, V60.13.0.12B,
                 V60.13.0.12ZB, or later. The input string escape sequences can be embedded in quality 200 field
@@ -1536,8 +1561,8 @@ class Formatter(object):
                     example, symbol 3 of 7 with file ID 1001 is represented by ~2214001001)
                   * 5NNN is code page NNN where NNN is a three-digit code page value (for example, Code Page
                     9 is represented by ~5009)
-                  *~dNNN creates ASCII decimal value NNN for a code word (must be three digits)
-                  *~ in data is encoded by a ~ (tilde)
+                  * ~dNNN creates ASCII decimal value NNN for a code word (must be three digits)
+                  * ~ in data is encoded by a ~ (tilde)
         """
         self.zpl.append('^BX')
         if orientation is None:
