@@ -3,12 +3,9 @@ from functools import wraps
 import requests
 
 
-def newline_after(func):
+def _newline_after(func):
     """
     append a newline after the function
-
-    :param func:
-    :return:
     """
 
     @wraps(func)
@@ -23,16 +20,14 @@ class Formatter(object):
     """
     Builds ZPL II label data based on methods called and data passed.
 
-    .zpl_text returns text of label code for debugging.
-    .zpl_bytes returns byte string of label code for sending to printer.
-    .render_png returns a png byte string from web service
-
-    Dots to real measurements based on printer dpi:
+    .. note::
+     Dots to real measurements based on printer dpi:
      150 dpi: 6 dots = 1 mm, 152 dots = 1 in,
      200 dpi: 8 dots = 1 mm, 203 dots = 1 in,
      300 dpi: 12 dots = 1 mm, 300 dots = 1 in,
      600 dpi: 24 dots = 1mm, 600 dots = 1 in
     """
+
     # TODO: Assure numbers are integers and then strings (eliminate str() list comp at retrieval
     # TODO: Detect '^' or '~' on Field Data, is there a way to escape this?
     # TODO: Change Barcode and Field Data into one call for custom error checking for barcode formats.
@@ -144,7 +139,7 @@ class Formatter(object):
         if not data.isalnum():
             raise ValueError('Data must contain only alphanumeric characters.')
 
-    @newline_after
+    @_newline_after
     def add_font(self, font_name, orientation=None, character_height=None, width=None):
         """
         Specify font to use in text field (^A)
@@ -168,7 +163,7 @@ class Formatter(object):
         if width:
             self._add_int_value_in_range(width, 'width', 10, 32000, True)
 
-    @newline_after
+    @_newline_after
     def add_label_home(self, x_pos=None, y_pos=None):
         """
         Label Home Position (^LH)
@@ -186,7 +181,7 @@ class Formatter(object):
             return
         self._add_int_value_in_range(y_pos, 'y_pos', 0, 32000, True)
 
-    @newline_after
+    @_newline_after
     def add_field_origin(self, x_pos=None, y_pos=None, justification=None):
         """
         Field Origin (^FO)
@@ -210,7 +205,7 @@ class Formatter(object):
             return
         self._add_value_in_list(justification, 'justification', (0, 1, 2), True)
 
-    @newline_after
+    @_newline_after
     def add_field_block(self, width=None, max_lines=None, dots_between_lines=None,
                         text_justification=None, hanging_indent=None):
         """
@@ -244,7 +239,7 @@ class Formatter(object):
             return
         self._add_int_value_in_range(hanging_indent, 'hanging_indent', 0, 9999, True, False)
 
-    @newline_after
+    @_newline_after
     def add_print_quantity(self, quantity=None, pause_and_cut_count=None,
                            replicates_of_serial=None,
                            override_pause=None, cut_on_error=None):
@@ -284,7 +279,7 @@ class Formatter(object):
             data = data.replace('\n', '\&')
         return data
 
-    @newline_after
+    @_newline_after
     def add_field_data(self, data_list, replace_newlines=False):
         """
         Field Data for Text or Barcode (^FD with 1-many ^FS)
@@ -340,7 +335,7 @@ class Formatter(object):
             return
         self._add_yes_no(check_digit_two, 'check_digit', True)
 
-    @newline_after
+    @_newline_after
     def add_barcode_aztec(self, orientation=None, magnification=None,
                           ecic=None, ec_symbol_size=None,
                           menu_symbol=None, number_of_symbols=None,
@@ -407,7 +402,7 @@ class Formatter(object):
         self._verify_legal_characters(data, '0123456789-')
         self.add_field_data(data)
 
-    @newline_after
+    @_newline_after
     def add_barcode_code_11(self, orientation=None, check_digit=None, height=None,
                             print_text=None, text_above=None):
         """
@@ -427,7 +422,7 @@ class Formatter(object):
         self._verify_data_numeric(data)
         self.add_field_data(data)
 
-    @newline_after
+    @_newline_after
     def add_barcode_interleaved_2_of_5(self, orientation=None, height=None,
                                        print_text=None, text_above=None, check_digit=None):
         """
@@ -452,7 +447,7 @@ class Formatter(object):
             self._verify_legal_characters(data, normal_set)
             self.add_field_data(data)
 
-    @newline_after
+    @_newline_after
     def add_barcode_code_39(self, orientation=None, check_digit=None, height=None,
                             print_text=None, text_above=None):
         """
@@ -469,7 +464,7 @@ class Formatter(object):
         """
         self._add_standard_1d_barcode('B3', orientation, check_digit, height, print_text, text_above)
 
-    @newline_after
+    @_newline_after
     def add_barcode_code_49(self, orientation=None, height_multiplier=None, print_text=None,
                             text_above=None, starting_mode=None):
         """
@@ -523,7 +518,7 @@ class Formatter(object):
         self._verify_data_numeric(data)
         self.add_field_data(data)
 
-    @newline_after
+    @_newline_after
     def add_barcode_planet_code(self, orientation=None, height=None,
                                 print_text=None, text_above=None):
         """
@@ -536,7 +531,7 @@ class Formatter(object):
         """
         self._add_standard_1d_barcode('B5', orientation, None, height, print_text, text_above)
 
-    @newline_after
+    @_newline_after
     def add_barcode_pdf417(self, orientation=None, height=None, security_level=None,
                            data_column_count=None, row_count=None, truncate=None):
         """
@@ -579,7 +574,7 @@ class Formatter(object):
         self._verify_data_numeric(data)
         self.add_field_data(data)
 
-    @newline_after
+    @_newline_after
     def add_barcode_ean_8(self, orientation=None, height=None, print_text=None, text_above=None):
         """
         EAN 8 Bar Code (^B8)
@@ -595,7 +590,7 @@ class Formatter(object):
         self._verify_data_numeric(data)
         self.add_field_data(data)
 
-    @newline_after
+    @_newline_after
     def add_barcode_upc_e(self, orientation=None, height=None, print_text=None, text_above=None, check_digit=None):
         """
         UPC-E Bar Code (^B9)
@@ -617,7 +612,7 @@ class Formatter(object):
             self._verify_legal_characters(data, normal_set)
             self.add_field_data(data)
 
-    @newline_after
+    @_newline_after
     def add_barcode_code_93(self, orientation=None, height=None, print_text=None, text_above=None, check_digit=None):
         """
         Code 93 Bar Code (^BA)
@@ -630,7 +625,7 @@ class Formatter(object):
         """
         self._add_standard_1d_barcode('BA', orientation, None, height, print_text, text_above, check_digit)
 
-    @newline_after
+    @_newline_after
     def add_barcode_codablock(self, orientation=None, height=None, security_level=None,
                               characters_per_row=None, row_count=None, mode='F'):
         """
@@ -674,7 +669,7 @@ class Formatter(object):
 
         self._add_value_in_list(mode, 'mode', ('A', 'E', 'F'), True)
 
-    @newline_after
+    @_newline_after
     def add_barcode_code_128(self, orientation, height=None, print_text=None,
                              text_above=None, check_digit=None):
         """
@@ -688,7 +683,7 @@ class Formatter(object):
         """
         self._add_standard_1d_barcode('BC', orientation, None, height, print_text, text_above, check_digit)
 
-    @newline_after
+    @_newline_after
     def add_barcode_ups_maxicode(self, mode=None, symbol_number=None, symbol_count=None):
         """
         UPS MaxiCode Bar Code
@@ -782,7 +777,7 @@ class Formatter(object):
             data = data[:12]  # Truncate to 12
         self.add_field_data(data.zfill(12))  # zero pad out to 12
 
-    @newline_after
+    @_newline_after
     def add_barcode_ean_13(self, orientation=None, height=None, print_text=None, text_above=None):
         """
         EAN-13 Bar Code (^BE)
@@ -796,7 +791,7 @@ class Formatter(object):
         """
         self._add_standard_1d_barcode('BE', orientation, None, height, print_text, text_above)
 
-    @newline_after
+    @_newline_after
     def add_barcode_micropdf_417(self, orientation=None, height=None, mode=None):
         """
         MicroPDF417 Bar Code (^BF)
@@ -878,7 +873,7 @@ class Formatter(object):
         self._verify_data_numeric(data)
         self.add_field_data(data)
 
-    @newline_after
+    @_newline_after
     def add_barcode_industrial_2_of_5(self, orientation=None, height=None,
                                       print_text=None, text_above=None):
         """
@@ -897,7 +892,7 @@ class Formatter(object):
         self._verify_data_numeric(data)
         self.add_field_data(data)
 
-    @newline_after
+    @_newline_after
     def add_barcode_standard_2_of_5(self, orientation=None, height=None,
                                     print_text=None, text_above=None):
         """
@@ -923,7 +918,7 @@ class Formatter(object):
         self._verify_legal_characters(data, '0123456789-:.$/+')
         self.add_field_data(data)
 
-    @newline_after
+    @_newline_after
     def add_barcode_ansi_codabar(self, orientation=None, height=None,
                                  print_text=None, text_above=None,
                                  start_character=None, stop_character=None):
@@ -953,7 +948,7 @@ class Formatter(object):
         # Special case of Code 39
         self.add_field_data_code_39(data)
 
-    @newline_after
+    @_newline_after
     def add_barcode_logmars(self, orientation=None, height=None, text_above=None):
         """
         LOGMARS Bar Code (^BL)
@@ -979,7 +974,7 @@ class Formatter(object):
         self._verify_data_numeric(data)
         self.add_field_data(data)
 
-    @newline_after
+    @_newline_after
     def add_barcode_msi(self, orientation=None, check_digit=None, height=None,
                         print_text=None, text_above=None, insert_check_digit=None):
         """
@@ -1028,7 +1023,7 @@ class Formatter(object):
         self._verify_legal_characters(data, allowed)
         self.add_field_data(data)
 
-    @newline_after
+    @_newline_after
     def add_barcode_plessey(self, orientation=None, check_digit=None,
                             height=None, print_text=None, text_above=None):
         """
@@ -1044,7 +1039,7 @@ class Formatter(object):
         """
         self._add_standard_1d_barcode('BP', orientation, check_digit, height, print_text, text_above)
 
-    @newline_after
+    @_newline_after
     def add_barcode_qr(self, model=None, magnification=None, error_correction=None, mask_value=None):
         # TODO: FD data QR switches
         """
@@ -1202,7 +1197,7 @@ class Formatter(object):
             return
         self._add_int_value_in_range(mask_value, 'mask_value', 0, 7, True)
 
-    @newline_after
+    @_newline_after
     def add_barcode_gs1_batabar(self, orientation=None, symbology_type=None, magnification=None,
                                 separator_height=None, height=None, width=None):
         """
@@ -1264,7 +1259,7 @@ class Formatter(object):
         self._verify_data_numeric(data)
         self.add_field_data(data)
 
-    @newline_after
+    @_newline_after
     def add_barcode_upc_ean_extensions(self, orientation=None, height=None, print_text=None, text_above=None):
         """
         UPC/EAN Extensions Bar Code (^BS)
@@ -1276,7 +1271,7 @@ class Formatter(object):
         """
         self._add_standard_1d_barcode('BS', orientation, None, height, print_text, text_above)
 
-    @newline_after
+    @_newline_after
     def add_field_data_tlc39(self, eci_number, serial_number=None, additional_data=None):
         """
         Add data field for tlc39 barcode
@@ -1321,7 +1316,7 @@ class Formatter(object):
 
         self.add_field_data(','.join(data))
 
-    @newline_after
+    @_newline_after
     def add_barcode_tlc39(self, orientation=None, code_39_width=None,
                           code_39_ratio=None, code_39_height=None,
                           micropdf417_height=None, micropdf417_width=None):
@@ -1390,7 +1385,7 @@ class Formatter(object):
             data = data.zfill(11)  # zero pad if needed for 11
         self.add_field_data(data[:11])  # truncate if needed for 11
 
-    @newline_after
+    @_newline_after
     def add_barcode_upc_a(self, orientation=None, height=None, print_text=None, text_above=None, check_digit=None):
         """
         UPC-A Bar Code (^BU)
@@ -1421,7 +1416,7 @@ class Formatter(object):
     #                                                                                                quality))
     #     self.add_field_data(data)
 
-    @newline_after
+    @_newline_after
     def add_barcode_data_matrix(self, orientation=None, height=None, quality=None, columns=None, rows=None,
                                 format_id=None, escape_sequence=None, aspect_ratio=None):
         """
@@ -1540,7 +1535,7 @@ class Formatter(object):
         self._verify_data_numeric(data)
         self.add_field_data(data)
 
-    @newline_after
+    @_newline_after
     def add_barcode_postal(self, orientation=None, height=None, print_text=None, text_above=None, code_type=None):
         """
         Postal Bar Code (^BZ)
@@ -1561,7 +1556,7 @@ class Formatter(object):
             return
         self._add_int_value_in_range(code_type, 'code_type', 0, 3, True, False)
 
-    @newline_after
+    @_newline_after
     def add_barcode_default(self, module_width=None, wide_narrow_ratio=None, height=None):
         """
         Set defaults for bar codes (^BY)
@@ -1585,7 +1580,7 @@ class Formatter(object):
 
         # TODO: Should height be implmented?
 
-    @newline_after
+    @_newline_after
     def add_comment(self, comment_text):
         """
         Comment Block (^FX)
@@ -1594,7 +1589,7 @@ class Formatter(object):
         """
         self.zpl.append('^FX{}^FS'.format(comment_text))
 
-    @newline_after
+    @_newline_after
     def add_graphic_box(self, width=None, height=None, border=None, line_color=None, corner_rounding=None):
         """
         Produce Graphic Box on Label (^GB)
@@ -1631,7 +1626,7 @@ class Formatter(object):
             return
         self._add_int_value_in_range(corner_rounding, 'corner_rounding', 0, 8, True, False)
 
-    @newline_after
+    @_newline_after
     def add_graphic_circle(self, diameter=None, border=None, color=None):
         """
         Produce Circle on Label (^GC)
