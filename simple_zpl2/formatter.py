@@ -24,13 +24,10 @@ class Formatter(object):
     
      Dots to real measurements based on printer dpi:
     
-     150 dpi: 6 dots = 1 mm, 152 dots = 1 in,
-    
-     200 dpi: 8 dots = 1 mm, 203 dots = 1 in,
-    
-     300 dpi: 12 dots = 1 mm, 300 dots = 1 in,
-    
-     600 dpi: 24 dots = 1mm, 600 dots = 1 in
+        * 150 dpi: 6 dots = 1 mm, 152 dots = 1 in,
+        * 200 dpi: 8 dots = 1 mm, 203 dots = 1 in,
+        * 300 dpi: 12 dots = 1 mm, 300 dots = 1 in,
+        * 600 dpi: 24 dots = 1mm, 600 dots = 1 in
     """
 
     # TODO: Assure numbers are integers and then strings (eliminate str() list comp at retrieval
@@ -150,7 +147,11 @@ class Formatter(object):
         Specify font to use in text field (^A)
 
         :param font_name: A-Z or 0-9 of font stored in printer
-        :param orientation: 'N' - Normal, 'R' - Rotated 90 clockwise, 'I' - Inverted, 'B' - Bottom Up (270 rotate)
+        :param orientation:
+            * 'N' - Normal
+            * 'R' - Rotated 90 clockwise
+            * 'I' - Inverted
+            * 'B' - Bottom Up (270 rotate)
         :param character_height: 10 to 32000 dots
         :param width: 10 to 32000 dots
         """
@@ -190,11 +191,15 @@ class Formatter(object):
     def add_field_origin(self, x_pos=None, y_pos=None, justification=None):
         """
         Field Origin (^FO)
+        
         Location where Field should start.
 
         :param x_pos: x axis position in dots (0 to 32000)
         :param y_pos: y axis position in dots (0 to 32000)
-        :param justification: 0 - left, 1 - right, 2 - auto
+        :param justification: 
+            * 0 - left
+            * 1 - right
+            * 2 - auto
         """
         self.zpl.append('^FO')
 
@@ -219,7 +224,11 @@ class Formatter(object):
         :param width: width of text 0 to label width
         :param max_lines: max number of lines in block, 1 to 9999
         :param dots_between_lines: dots between line adjustment -9999 to 9999
-        :param text_justification: 'L' - Left, 'C' - center, 'R' - right, 'J' - justified
+        :param text_justification: 
+            * 'L' - Left
+            * 'C' - center
+            * 'R' - right
+            * 'J' - justified
         :param hanging_indent: 0 to 9999
         """
         self.zpl.append('^FB')
@@ -292,7 +301,6 @@ class Formatter(object):
         :param data_list:  if list or tuple, multiple data blocks with '^FS' separator
                            otherwise, single field with value
         :param replace_newlines: If true, replaces \n with \&
-        :return None
         """
         data = data_list
         if type(data) in (list, tuple):
@@ -308,12 +316,16 @@ class Formatter(object):
         Common Barcode output for 1D barcodes
 
         :param zpl_code: code for bar code type.  (ex: 'BZ','BE')
-        :param orientation: 'N' - normal, 'R' - rotate 90, 'I' - inverted, 'B' - rotate 270
+        :param orientation: 
+            * 'N' - normal
+            * 'R' - rotate 90
+            * 'I' - inverted
+            * 'B' - rotate 270
         :param height: bar code height in dots (1 to 32000)
         :param print_text: print text of data ('Y', 'N')
         :param text_above: print text above barcode ('Y', 'N')
-        :return: True if all fields used and can add additional
-                 False if any additional fields should be ignored
+        :return: * True if all fields used and can add additional
+                 * False if any additional fields should be ignored
         """
         self.zpl.append('^{}'.format(zpl_code))
 
@@ -348,15 +360,20 @@ class Formatter(object):
         """
         Aztec Barcode (^B0 [zero] or ^BO [letter])
 
-        :param orientation: 'N' - normal, 'R' - rotate 90, 'I' - inverted, 'B' - rotate 270
+        :param orientation: * 'N' - normal
+                            * 'R' - rotate 90
+                            * 'I' - inverted
+                            * 'B' - rotate 270
         :param magnification: 1 to 10
-        :param ecic: 'Y' - data contains ECICs, 'N' - does not contain ECICs
-        :param ec_symbol_size: 0 - default error correction
-                               01-99 - error correction percentage
-                               101-104 - 1-4 layer compact symbol
-                               201-232 - 1-32 layer full-range symbol
-                               300 - simple Aztec "Rune"
-        :param menu_symbol: 'Y' - a menu or barcode reader initialization sybmol, 'N' - not menu symbol
+        :param ecic: * 'Y' - data contains ECICs
+                     * 'N' - does not contain ECICs
+        :param ec_symbol_size: * 0 - default error correction
+                               * 01-99 - error correction percentage
+                               * 101-104 - 1-4 layer compact symbol
+                               * 201-232 - 1-32 layer full-range symbol
+                               * 300 - simple Aztec "Rune"
+        :param menu_symbol: * 'Y' - a menu or barcode reader initialization sybmol
+                            * 'N' - not menu symbol
         :param number_of_symbols: Structured append 1-26 sybmols
         :param structured_id_append: up to 24 character ID data
         """
@@ -702,7 +719,7 @@ class Formatter(object):
         :param symbol_number: 1-8
         :param symbol_count: 1-8
 
-        ..note::
+        .. note::
 
         Considerations for ^FD when Using ^BD
         The ^FD statement is divided into two parts: a high priority message (hpm) and a low priority
