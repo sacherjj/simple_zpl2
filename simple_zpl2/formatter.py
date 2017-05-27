@@ -610,6 +610,11 @@ class Formatter(object):
         self._add_yes_no(truncate, 'truncate', True)
 
     def add_field_data_ean_8(self, data):
+        """
+        Verify and Add Field Data for EAN 8
+        
+        :param data: data for barcode (must be numeric)
+        """
         self._verify_data_numeric(data)
         self.add_field_data(data)
 
@@ -643,6 +648,12 @@ class Formatter(object):
         self._add_standard_1d_barcode('B9', orientation, None, height, print_text, text_above, check_digit)
 
     def add_field_data_code_93(self, data, extended_ascii=False):
+        """
+        
+        :param data: 
+        :param extended_ascii: 
+        :return: 
+        """
         normal_set = '01234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ-.$/+%&,() '
         if extended_ascii:
             # TODO Add Code 93 translation of ASCII to valid chars
@@ -670,12 +681,17 @@ class Formatter(object):
         """
         CODABLOCK Bar Code (^BB)
 
-        :param orientation: 'N' - normal, 'R' - rotate 90, 'I' - inverted, 'B' - rotate 270
+        :param orientation: * 'N' - normal
+                            * 'R' - rotate 90
+                            * 'I' - inverted
+                            * 'B' - rotate 270
         :param height: height of individual dots (2 to 32000)
         :param security_level: ('Y', 'N') only 'N' if mode is 'A'
         :param characters_per_row: 2-62
         :param row_count: mode A: 1-22, mode E,F: 2-4
-        :param mode: 'A' - Code 39, 'F' - Code 128, 'E' - Code 128 with FNC1
+        :param mode: * 'A' - Code 39
+                     * 'F' - Code 128
+                     * 'E' - Code 128 with FNC1
         """
         self.zpl.append('^BB')
 
@@ -714,7 +730,10 @@ class Formatter(object):
         """
         Code 128 Barcode (^BC)
 
-        :param orientation: 'N' - normal, 'R' - rotate 90, 'I' - inverted, 'B' - rotate 270
+        :param orientation: * 'N' - normal
+                            * 'R' - rotate 90
+                            * 'I' - inverted
+                            * 'B' - rotate 270
         :param height: bar code height in dots (1 to 32000)
         :param print_text: print text of data ('Y', 'N')
         :param text_above: print text above barcode ('Y', 'N')
@@ -995,7 +1014,10 @@ class Formatter(object):
         """
         LOGMARS Bar Code (^BL)
 
-        :param orientation: 'N' - normal, 'R' - rotate 90, 'I' - inverted, 'B' - rotate 270
+        :param orientation: * 'N' - normal
+                            * 'R' - rotate 90
+                            * 'I' - inverted
+                            * 'B' - rotate 270
         :param height: bar code height in dots (1 to 32000)
         :param text_above: print text above barcode ('Y', 'N')
         """
