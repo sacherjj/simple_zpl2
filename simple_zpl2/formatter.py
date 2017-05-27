@@ -21,10 +21,15 @@ class Formatter(object):
     Builds ZPL II label data based on methods called and data passed.
 
     .. note::
+    
      Dots to real measurements based on printer dpi:
+    
      150 dpi: 6 dots = 1 mm, 152 dots = 1 in,
+    
      200 dpi: 8 dots = 1 mm, 203 dots = 1 in,
+    
      300 dpi: 12 dots = 1 mm, 300 dots = 1 in,
+    
      600 dpi: 24 dots = 1mm, 600 dots = 1 in
     """
 
@@ -688,13 +693,16 @@ class Formatter(object):
         """
         UPS MaxiCode Bar Code
 
-        :param mode: 2 - structured carrier message: numeric postal code (U.S.)
-                     3 - structured carrier message: alphanumeric postal code (non-U.S.)
-                     4 - standard symbol, secretary
-                     5 - full EEC
-                     6 - reader program, secretary
+        :param mode: 
+            * 2 - structured carrier message: numeric postal code (U.S.)
+            * 3 - structured carrier message: alphanumeric postal code (non-U.S.)
+            * 4 - standard symbol, secretary
+            * 5 - full EEC
+            * 6 - reader program, secretary
         :param symbol_number: 1-8
         :param symbol_count: 1-8
+
+        ..note::
 
         Considerations for ^FD when Using ^BD
         The ^FD statement is divided into two parts: a high priority message (hpm) and a low priority
