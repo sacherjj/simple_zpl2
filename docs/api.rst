@@ -1,5 +1,10 @@
-simple_zpl2 package
-===================
+=================
+API Documentation
+=================
+
+.. toctree::
+    :maxdepth: 1
+    :glob:
 
 Formatter
 ---------
