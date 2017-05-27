@@ -21,18 +21,18 @@ class Formatter(object):
     Builds ZPL II label data based on methods called and data passed.
 
     .. note::
-    
+
      Dots to real measurements based on printer dpi:
-    
+
         * 150 dpi: 6 dots = 1 mm, 152 dots = 1 in,
         * 200 dpi: 8 dots = 1 mm, 203 dots = 1 in,
         * 300 dpi: 12 dots = 1 mm, 300 dots = 1 in,
         * 600 dpi: 24 dots = 1mm, 600 dots = 1 in
     """
 
-    # TODO: Assure numbers are integers and then strings (eliminate str() list comp at retrieval
+    # TODO: Assure numbers are integers and then convert to str
     # TODO: Detect '^' or '~' on Field Data, is there a way to escape this?
-    # TODO: Change Barcode and Field Data into one call for custom error checking for barcode formats.
+    # TODO: Change Barcode and Field Data with custom error checking
     # TODO: Make Barcode classes for custom handling like UPS
 
     #: Starting block in ZPL2 document.  Added automatically
@@ -193,12 +193,12 @@ class Formatter(object):
     def add_field_origin(self, x_pos=None, y_pos=None, justification=None):
         """
         Field Origin (^FO)
-        
+
         Location where Field should start.
 
         :param x_pos: x axis position in dots (0 to 32000)
         :param y_pos: y axis position in dots (0 to 32000)
-        :param justification: 
+        :param justification:
             * 0 - left
             * 1 - right
             * 2 - auto
@@ -226,7 +226,7 @@ class Formatter(object):
         :param width: width of text 0 to label width
         :param max_lines: max number of lines in block, 1 to 9999
         :param dots_between_lines: dots between line adjustment -9999 to 9999
-        :param text_justification: 
+        :param text_justification:
             * 'L' - Left
             * 'C' - center
             * 'R' - right
@@ -318,7 +318,7 @@ class Formatter(object):
         Common Barcode output for 1D barcodes
 
         :param zpl_code: code for bar code type.  (ex: 'BZ','BE')
-        :param orientation: 
+        :param orientation:
             * 'N' - normal
             * 'R' - rotate 90
             * 'I' - inverted
@@ -396,9 +396,9 @@ class Formatter(object):
         if ec_symbol_size is None:
             return
         if not (0 <= ec_symbol_size <= 99 or
-                            101 <= ec_symbol_size <= 104 or
-                            201 <= ec_symbol_size <= 232 or
-                        ec_symbol_size == 300):
+                101 <= ec_symbol_size <= 104 or
+                201 <= ec_symbol_size <= 232 or
+                ec_symbol_size == 300):
             raise ValueError('ec_symbol_size must be 0, 1-99, 101-104, 201-232, or 300.')
         if 1 <= ec_symbol_size <= 9:
             ec_string = '0' + str(ec_symbol_size)
@@ -472,10 +472,10 @@ class Formatter(object):
     def add_field_data_code_39(self, data, extended_ascii=False):
         """
         Add field data for code 39 barcode
-        
-        :param data: Data to encode 
+ 
+        :param data: Data to encode
         :param extended_ascii: Boolean for extended ascii support
-        
+ 
         .. todo:: Implement Code 39 translation for extended ascii
         """
         normal_set = '01234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ-.$/+% '
@@ -612,7 +612,7 @@ class Formatter(object):
     def add_field_data_ean_8(self, data):
         """
         Verify and Add Field Data for EAN 8
-        
+ 
         :param data: data for barcode (must be numeric)
         """
         self._verify_data_numeric(data)
@@ -649,10 +649,12 @@ class Formatter(object):
 
     def add_field_data_code_93(self, data, extended_ascii=False):
         """
+        Verify and add code 93 data
         
-        :param data: 
-        :param extended_ascii: 
-        :return: 
+        :param data: data for barcode
+        :param extended_ascii: boolean
+
+        .. todo: Add extended ascii translation and escaping
         """
         normal_set = '01234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ-.$/+%&,() '
         if extended_ascii:
@@ -673,11 +675,13 @@ class Formatter(object):
         :param text_above: print text above barcode ('Y', 'N')
         :param check_digit: print check digit ('Y', 'N')
         """
-        self._add_standard_1d_barcode('BA', orientation, None, height, print_text, text_above, check_digit)
+        self._add_standard_1d_barcode('BA', orientation, None, height,
+                                      print_text, text_above, check_digit)
 
     @_newline_after
-    def add_barcode_codablock(self, orientation=None, height=None, security_level=None,
-                              characters_per_row=None, row_count=None, mode='F'):
+    def add_barcode_codablock(self, orientation=None, height=None,
+                              security_level=None, characters_per_row=None,
+                              row_count=None, mode='F'):
         """
         CODABLOCK Bar Code (^BB)
 
@@ -831,7 +835,12 @@ class Formatter(object):
         self._add_int_value_in_range(symbol_count, 'symbol_count', 1, 8, True)
 
     def add_field_data_ean_13(self, data):
-        # deal with coming in as number
+        """
+        Verify and add ean 13 data
+
+        :param data: data for barcode
+        """
+        # TODO: deal with coming in as number
         data = str(data)
         self._verify_data_numeric(data)
         if len(data) > 12:
@@ -861,60 +870,71 @@ class Formatter(object):
         :param height: bar code height in dots (1 to 9999)
         :param mode: 0-33
 
-        To encode data into a MicroPDF417 bar code, complete these steps:
-            1. Determine the type of data to be encoded (for example, ASCII characters, numbers, 8-bit
-            data, or a combination).
-            2. Determine the maximum amount of data to be encoded within the bar code (for
-            example, number of ASCII characters, quantity of numbers, or quantity of 8-bit data
-            characters).
-            3. Determine the percentage of check digits that are used within the bar code. The higher
-            the percentage of check digits that are used, the more resistant the bar code is to
-            damage — however, the size of the bar code increases.
-            4. Use Table 10 with the information gathered from the questions above to select the mode
-            of the bar code.
+        .. note:
 
-         MO - mode
-         DC - Number of Data Columns
-         DR - Number of Data Rows
-         EC - % of CWS for EC
-         MX - Max Alpha Characters
-         MD - Max Digits
-
-        MO DC DR EC  MX  MD
-         0  1 11 64   6   8
-         1  1 14 50  12  17
-         2  1 17 41  18  26
-         3  1 20 40  22  32
-         4  1 24 33  30  44
-         5  1 28 29  38  55
-         6  2  8 50  14  20
-         7  2 11 41  24  35
-         8  2 14 32  36  52
-         9  2 17 29  46  67
-        10  2 20 28  56  82
-        11  2 23 28  64  93
-        12  2 26 29  72 105
-        13  3  6 67  10  14
-        14  3  8 58  18  26
-        15  3 10 53  26  38
-        16  3 12 50  34  49
-        17  3 15 47  46  67
-        18  3 20 43  66  96
-        19  3 26 41  90 132
-        20  3 32 40 114 167
-        21  3 38 39 138 202
-        22  3 44 38 162 237
-        23  4  6 50  22  32
-        24  4  8 44  34  49
-        25  4 10 40  46  67
-        26  4 12 38  58  85
-        27  4 15 35  76 111
-        28  4 20 33 106 155
-        29  4 26 31 142 208
-        30  4 32 30 178 261
-        31  4 38 29 214 313
-        32  4 44 28 250 366
-        33  4  4 50  14  20
+            To encode data into a MicroPDF417 bar code, complete these steps:
+                
+                1. Determine the type of data to be encoded (for example, ASCII characters, numbers, 8-bit
+                data, or a combination).
+                
+                2. Determine the maximum amount of data to be encoded within the bar code (for
+                example, number of ASCII characters, quantity of numbers, or quantity of 8-bit data
+                characters).
+                
+                3. Determine the percentage of check digits that are used within the bar code. The higher
+                the percentage of check digits that are used, the more resistant the bar code is to
+                damage — however, the size of the bar code increases.
+                
+                4. Use Table 10 with the information gathered from the questions above to select the mode
+                of the bar code.
+    
+             MO - mode
+             
+             DC - Number of Data Columns
+             
+             DR - Number of Data Rows
+             
+             EC - % of CWS for EC
+             
+             MX - Max Alpha Characters
+             
+             MD - Max Digits
+    
+            MO DC DR EC  MX  MD
+             0  1 11 64   6   8
+             1  1 14 50  12  17
+             2  1 17 41  18  26
+             3  1 20 40  22  32
+             4  1 24 33  30  44
+             5  1 28 29  38  55
+             6  2  8 50  14  20
+             7  2 11 41  24  35
+             8  2 14 32  36  52
+             9  2 17 29  46  67
+            10  2 20 28  56  82
+            11  2 23 28  64  93
+            12  2 26 29  72 105
+            13  3  6 67  10  14
+            14  3  8 58  18  26
+            15  3 10 53  26  38
+            16  3 12 50  34  49
+            17  3 15 47  46  67
+            18  3 20 43  66  96
+            19  3 26 41  90 132
+            20  3 32 40 114 167
+            21  3 38 39 138 202
+            22  3 44 38 162 237
+            23  4  6 50  22  32
+            24  4  8 44  34  49
+            25  4 10 40  46  67
+            26  4 12 38  58  85
+            27  4 15 35  76 111
+            28  4 20 33 106 155
+            29  4 26 31 142 208
+            30  4 32 30 178 261
+            31  4 38 29 214 313
+            32  4 44 28 250 366
+            33  4  4 50  14  20
         """
         self.zpl.append('^BF')
 
@@ -1523,47 +1543,47 @@ class Formatter(object):
         .. note::
 
         Effects of ^BY on ^BX
-            
+
             w = module width (no effect)
-            
+
             r = ratio (no effect)
-            
+
             h = height of symbol
-            
+
                 If the dimensions of individual symbol elements are not specified in the ^BY command,
                 the height of symbol value is divided by the required rows/columns, rounded, limited to a
                 minimum value of one, and used as the dimensions of individual symbol elements.
-        
+
         Field Data (^FD) for ^BX
-        
+
             Quality 000 to 140
-        
+
                 * The \& and || can be used to insert carriage returns, line feeds, and the backslash, similar to the
                   PDF417. Other characters in the control character range can be inserted only by using ^FH.
                   Field data is limited to 596 characters for quality 0 to 140. Excess field data causes no symbol to
                   print; if ^CV is active, INVALID-L prints. The field data must correspond to a user-specified
                   format ID or no symbol prints; if ^CV is active, INVALID-C prints.
-                
+
                 * The maximum field sizes for quality 0 to 140 symbols are shown in the tktable in the g parameter.
-            
+
             Quality 200
-            
+
                 * If more than 3072 bytes are supplied as field data, it is truncated to 3072 bytes. This limits the
                   maximum size of a numeric Data Matrix symbol to less than the 3116 numeric characters that
                   the specification would allow. The maximum alphanumeric capacity is 2335 and the maximum
                   8-bit byte capacity is 1556.
-                
+
                 * If ^FH is used, field hexadecimal processing takes place before the escape sequence
                   processing described below.
-                
+
                 * The underscore is the default escape sequence control character for quality 200 field data. A
                   different escape sequence control character can be selected by using parameter g in the ^BX
                   command.
-                
+
                 The information that follows applies to firmware version: V60.13.0.12, V60.13.0.12Z, V60.13.0.12B,
                 V60.13.0.12ZB, or later. The input string escape sequences can be embedded in quality 200 field
                 data using the ASCII 95 underscore character ( _ ) or the character entered in parameter g:
-                
+
                   * _X is the shift character for control characters (e.g., _@=NUL,_G=BEL,_0 is PAD)
                   * _1 to _3 for FNC characters 1 to 3 (explicit FNC4, upper shift, is not allowed)
                   * FNC2 (Structured Append) must be followed by nine digits, composed of three-digit numbers
@@ -1757,7 +1777,7 @@ class Formatter(object):
     def zpl_text(self):
         """
         Renders zpl text as string for debugging.
-        
+
         :return: text string
         """
         return ''.join([str(item)
@@ -1768,14 +1788,15 @@ class Formatter(object):
     def zpl_bytes(self):
         """
         Renders zpl code as bytestring in UTF-8 formatting.
-        
+
         This is what you would typically send to a printer.
-                
+
         :return: byte array
         """
         return bytes(self.zpl_text, 'utf-8')
 
-    def render_png(self, label_width, label_height, dpmm=8, index=0):
+    def render_png(self, label_width, label_height,
+                   dpmm=8, index=0):
         """
         Uses labelary.com api to generate a PNG file
 
@@ -1783,7 +1804,7 @@ class Formatter(object):
 
         :param label_width: width in inches
         :param label_height: height in inches
-        :param dpmm: dots per mm, default 8 
+        :param dpmm: dots per mm, default 8
         :param index: label index (only important if you use in label)
         :return: byte array of PNG file
         """
@@ -1793,4 +1814,5 @@ class Formatter(object):
         if response.status_code == 200:
             return response.content
         else:
-            raise Exception('Expected status_code 200, received {}\n{}'.format(response.status_code, response.content))
+            raise Exception('Expected status_code 200, received {}\n{}'
+                            .format(response.status_code, response.content))

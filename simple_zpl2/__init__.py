@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from .formatter import Formatter
 from .printer import NetworkPrinter
 

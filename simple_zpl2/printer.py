@@ -1,5 +1,4 @@
 import socket
-from .formatter import Formatter
 
 
 class NetworkPrinter(object):
@@ -10,8 +9,8 @@ class NetworkPrinter(object):
     def __init__(self, ip_address, port=9100):
         """
         Constructor
-        
-        :param ip_address: printer network address as string ('xxx.xxx.xxx.xxx')
+
+        :param ip_address: printer network address as 'xxx.xxx.xxx.xxx'
         :param port: port of printer as int (default 9100)
         """
         self.ip = ip_address
@@ -20,7 +19,7 @@ class NetworkPrinter(object):
     def print_zpl(self, label_formatter, timeout=10):
         """
         Send ZPL2 formatted text to a network label printer
-        
+
         :param label_formatter: Formatter object, fully build for label.
         :param timeout: Socket timeout for printer connection, default 10.
         :return: None
