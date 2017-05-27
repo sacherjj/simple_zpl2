@@ -35,23 +35,29 @@ class Formatter(object):
     # TODO: Change Barcode and Field Data into one call for custom error checking for barcode formats.
     # TODO: Make Barcode classes for custom handling like UPS
 
+    #: Starting block in ZPL2 document.  Added automatically
     START = '^XA'
+    #: Ending block in ZPL2 document.  Added automatically
     END = '^XZ'
 
+    #: Orientation Values
     ORIENTATION_NORMAL = 'N'
     ORIENTATION_90 = 'R'
     ORIENTATION_180 = 'I'
     ORIENTATION_270 = 'B'
 
+    #: Justification Values
     JUSTIFICATION_LEFT = 0
     JUSTIFICATION_RIGHT = 1
     JUSTIFICATION_AUTO = 2
 
+    #: Text Justification Values
     TEXT_JUSTIFICATION_LEFT = 'L'
     TEXT_JUSTIFICATION_CENTER = 'C'
     TEXT_JUSTIFICATION_RIGHT = 'R'
     TEXT_JUSTIFICATION_JUSTIFIED = 'J'
 
+    #: QR Error Correction Values
     QR_ERROR_CORRECTION_ULTRA_HIGH = 'H'
     QR_ERROR_CORRECTION_HIGH = 'Q'
     QR_ERROR_CORRECTION_STANDARD = 'M'
@@ -1447,71 +1453,91 @@ class Formatter(object):
         """
         Data Matrix Bar Code (^BX)
 
-        :param orientation: 'N' - normal, 'R' - rotate 90, 'I' - inverted, 'B' - rotate 270
+        :param orientation: * 'N' - normal
+                            * 'R' - rotate 90
+                            * 'I' - inverted
+                            * 'B' - rotate 270
         :param height: height of individual symbol elements 1-width of label
         :param quality: amount of data added for error correction 0, 50, 80, 100, 140, 200
-        :param columns: columns to encode 9-49
-                        odd values only for quality 0-140
-                        even values for quality 200
+        :param columns: * columns to encode 9-49
+                        * odd values only for quality 0-140
+                        * even values for quality 200
         :param rows: rows to encode 9-49
-        :param format_id: 1 = field data is numeric + space (0..9,”) – No \&
-                          2 = field data is uppercase alphanumeric + space (A..Z,’’) – No \&’’
-                          3 = field data is uppercase alphanumeric + space, period, comma, dash, and slash (0..9,A..Z,“.-/”)
-                          4 = field data is upper-case alphanumeric + space (0..9,A..Z,’’) – no \&’’
-                          5 = field data is full 128 ASCII 7-bit set
-                          6 = field data is full 256 ISO 8-bit set
+        :param format_id: * 1 = field data is numeric + space (0..9,”) – No \&
+                          * 2 = field data is uppercase alphanumeric + space (A..Z,’’) – No \&’’
+                          * 3 = field data is uppercase alphanumeric + space, period, comma, dash, and slash (0..9,A..Z,“.-/”)
+                          * 4 = field data is upper-case alphanumeric + space (0..9,A..Z,’’) – no \&’’
+                          * 5 = field data is full 128 ASCII 7-bit set
+                          * 6 = field data is full 256 ISO 8-bit set
         :param escape_sequence: any character
-        :param aspect_ratio: 1 = square, 2 = rectangular
+        :param aspect_ratio: * 1 = square
+                             * 2 = rectangular
+
+        .. note::
 
         Effects of ^BY on ^BX
+            
             w = module width (no effect)
+            
             r = ratio (no effect)
+            
             h = height of symbol
+            
                 If the dimensions of individual symbol elements are not specified in the ^BY command,
                 the height of symbol value is divided by the required rows/columns, rounded, limited to a
                 minimum value of one, and used as the dimensions of individual symbol elements.
+        
         Field Data (^FD) for ^BX
+        
             Quality 000 to 140
-                • The \& and || can be used to insert carriage returns, line feeds, and the backslash, similar to the
+        
+                * The \& and || can be used to insert carriage returns, line feeds, and the backslash, similar to the
                 PDF417. Other characters in the control character range can be inserted only by using ^FH.
                 Field data is limited to 596 characters for quality 0 to 140. Excess field data causes no symbol to
                 print; if ^CV is active, INVALID-L prints. The field data must correspond to a user-specified
                 format ID or no symbol prints; if ^CV is active, INVALID-C prints.
-                • The maximum field sizes for quality 0 to 140 symbols are shown in the tktable in the g parameter.
+                
+                * The maximum field sizes for quality 0 to 140 symbols are shown in the tktable in the g parameter.
+            
             Quality 200
-                • If more than 3072 bytes are supplied as field data, it is truncated to 3072 bytes. This limits the
+            
+                * If more than 3072 bytes are supplied as field data, it is truncated to 3072 bytes. This limits the
                 maximum size of a numeric Data Matrix symbol to less than the 3116 numeric characters that
                 the specification would allow. The maximum alphanumeric capacity is 2335 and the maximum
                 8-bit byte capacity is 1556.
-                • If ^FH is used, field hexadecimal processing takes place before the escape sequence
+                
+                * If ^FH is used, field hexadecimal processing takes place before the escape sequence
                 processing described below.
-                • The underscore is the default escape sequence control character for quality 200 field data. A
+                
+                * The underscore is the default escape sequence control character for quality 200 field data. A
                 different escape sequence control character can be selected by using parameter g in the ^BX
                 command.
+                
                 The information that follows applies to firmware version: V60.13.0.12, V60.13.0.12Z, V60.13.0.12B,
                 V60.13.0.12ZB, or later. The input string escape sequences can be embedded in quality 200 field
                 data using the ASCII 95 underscore character ( _ ) or the character entered in parameter g:
-                • _X is the shift character for control characters (e.g., _@=NUL,_G=BEL,_0 is PAD)
-                • _1 to _3 for FNC characters 1 to 3 (explicit FNC4, upper shift, is not allowed)
-                • FNC2 (Structured Append) must be followed by nine digits, composed of three-digit numbers
-                with values between 1 and 254, that represent the symbol sequence and file identifier (for
-                example, symbol 3 of 7 with file ID 1001 is represented by _2214001001)
-                • 5NNN is code page NNN where NNN is a three-digit code page value (for example, Code Page
-                9 is represented by _5009)
-                • _dNNN creates ASCII decimal value NNN for a code word (must be three digits)
-                • _ in data is encoded by __ (two underscores)
-                The information that follows applies to all other versions of firmware. The input string escape
-                sequences can be embedded in quality 200 field data using the ASCII 7E tilde character (~) or the
-                character entered in parameter g:
-                • ~X is the shift character for control characters (e.g., ~@=NUL,~G=BEL,~0 is PAD)
-                • ~1 to ~3 for FNC characters 1 to 3 (explicit FNC4, upper shift, is not allowed)
-                • FNC2 (Structured Append) must be followed by nine digits, composed of three-digit numbers
-                with values between 1 and 254, that represent the symbol sequence and file identifier (for
-                example, symbol 3 of 7 with file ID 1001 is represented by ~2214001001)
-                • 5NNN is code page NNN where NNN is a three-digit code page value (for example, Code Page
-                9 is represented by ~5009)
-                • ~dNNN creates ASCII decimal value NNN for a code word (must be three digits)
-                • ~ in data is encoded by a ~ (tilde)
+                
+                  * _X is the shift character for control characters (e.g., _@=NUL,_G=BEL,_0 is PAD)
+                  * _1 to _3 for FNC characters 1 to 3 (explicit FNC4, upper shift, is not allowed)
+                  * FNC2 (Structured Append) must be followed by nine digits, composed of three-digit numbers
+                    with values between 1 and 254, that represent the symbol sequence and file identifier (for
+                    example, symbol 3 of 7 with file ID 1001 is represented by _2214001001)
+                  * 5NNN is code page NNN where NNN is a three-digit code page value (for example, Code Page
+                    9 is represented by _5009)
+                  * _dNNN creates ASCII decimal value NNN for a code word (must be three digits)
+                  * _ in data is encoded by __ (two underscores)
+                    The information that follows applies to all other versions of firmware. The input string escape
+                    sequences can be embedded in quality 200 field data using the ASCII 7E tilde character (~) or the
+                    character entered in parameter g:
+                  * ~X is the shift character for control characters (e.g., ~@=NUL,~G=BEL,~0 is PAD)
+                  * ~1 to ~3 for FNC characters 1 to 3 (explicit FNC4, upper shift, is not allowed)
+                  * FNC2 (Structured Append) must be followed by nine digits, composed of three-digit numbers
+                    with values between 1 and 254, that represent the symbol sequence and file identifier (for
+                    example, symbol 3 of 7 with file ID 1001 is represented by ~2214001001)
+                  * 5NNN is code page NNN where NNN is a three-digit code page value (for example, Code Page
+                    9 is represented by ~5009)
+                  *~dNNN creates ASCII decimal value NNN for a code word (must be three digits)
+                  *~ in data is encoded by a ~ (tilde)
         """
         self.zpl.append('^BX')
         if orientation is None:
@@ -1520,7 +1546,7 @@ class Formatter(object):
 
         if height is None:
             return
-        # How to validate 1 to width of label?
+        # How to validate 1 to height of label?
         self._add_int_value_in_range(height, 'height', 1, 32000, True)
 
         if quality is None:
@@ -1567,14 +1593,17 @@ class Formatter(object):
 
         Characters (0-9)
 
-        :param orientation: 'N' - normal, 'R' - rotate 90, 'I' - inverted, 'B' - rotate 270
+        :param orientation: * 'N' - normal
+                            * 'R' - rotate 90
+                            * 'I' - inverted
+                            * 'B' - rotate 270
         :param height: bar code height in dots (1 to 32000)
         :param print_text: print text of data ('Y', 'N')
         :param text_above: print text above barcode ('Y', 'N')
-        :param code_type: 0 = Postnet bar code
-                          1 = Plant Bar Code
-                          2 = Reserved
-                          3 = USPS Intelligent Mail bar code
+        :param code_type: * 0 = Postnet bar code
+                          * 1 = Plant Bar Code
+                          * 2 = Reserved
+                          * 3 = USPS Intelligent Mail bar code
         """
         self._add_standard_1d_barcode('BZ', orientation, None, height, print_text, text_above)
         if code_type is None:
@@ -1603,7 +1632,9 @@ class Formatter(object):
             return
         self._add_int_value_in_range(module_width, 'module_width', 1, 10, True)
 
-        # TODO: Should height be implmented?
+        if height is None:
+            return
+        self._add_int_value_in_range(height, 'height', 1, 200, True)
 
     @_newline_after
     def add_comment(self, comment_text):
@@ -1622,7 +1653,8 @@ class Formatter(object):
         :param width: border to 32000
         :param height: border to 32000
         :param border: 1 to 32000
-        :param line_color: 'B' - black, 'W' - white
+        :param line_color: * 'B' - black
+                           * 'W' - white
         :param corner_rounding: 0 (none) to 8 (heaviest rounding)
         """
         self.zpl.append('^GB')
@@ -1658,7 +1690,8 @@ class Formatter(object):
 
         :param diameter: 3 to 4095
         :param border: 1 to 4095
-        :param color: 'B' - black, 'W' - white
+        :param color: * 'B' - black
+                      * 'W' - white
         """
         self.zpl.append('^GC')
         if diameter is None:
@@ -1678,8 +1711,6 @@ class Formatter(object):
         """
         Renders zpl text as string for debugging.
         
-        Adds end tag if missing.
-        
         :return: text string
         """
         return ''.join([str(item)
@@ -1690,11 +1721,10 @@ class Formatter(object):
     def zpl_bytes(self):
         """
         Renders zpl code as bytestring in UTF-8 formatting.
-        This is what you would typically send to a printer.
         
-        Adds end tag if missing.
+        This is what you would typically send to a printer.
                 
-        :return: byte string
+        :return: byte array
         """
         return bytes(self.zpl_text, 'utf-8')
 
