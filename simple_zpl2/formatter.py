@@ -16,6 +16,7 @@ def _newline_after(func):
     return decorated
 
 
+# noinspection PyPackageRequirements
 class Formatter(object):
     """
     Builds ZPL II label data based on methods called and data passed.
@@ -35,10 +36,8 @@ class Formatter(object):
     # TODO: Change Barcode and Field Data with custom error checking
     # TODO: Make Barcode classes for custom handling like UPS
 
-    #: Starting block in ZPL2 document.  Added automatically
-    START = '^XA'
-    #: Ending block in ZPL2 document.  Added automatically
-    END = '^XZ'
+    _START = '^XA'
+    _END = '^XZ'
 
     ORIENTATION_NORMAL = 'N'
     ORIENTATION_90 = 'R'
@@ -60,7 +59,7 @@ class Formatter(object):
     QR_ERROR_CORRECTION_LOW = 'H'
 
     def __init__(self):
-        self.zpl = [self.START]
+        self.zpl = [self._START]
         self._newline()
 
     def _add_comma(self, comma):
@@ -318,11 +317,10 @@ class Formatter(object):
         Common Barcode output for 1D barcodes
 
         :param zpl_code: code for bar code type.  (ex: 'BZ','BE')
-        :param orientation:
-            * 'N' - normal
-            * 'R' - rotate 90
-            * 'I' - inverted
-            * 'B' - rotate 270
+        :param orientation: * 'N' - normal
+                            * 'R' - rotate 90
+                            * 'I' - inverted
+                            * 'B' - rotate 270
         :param height: bar code height in dots (1 to 32000)
         :param print_text: print text of data ('Y', 'N')
         :param text_above: print text above barcode ('Y', 'N')
@@ -472,10 +470,10 @@ class Formatter(object):
     def add_field_data_code_39(self, data, extended_ascii=False):
         """
         Add field data for code 39 barcode
- 
+
         :param data: Data to encode
         :param extended_ascii: Boolean for extended ascii support
- 
+
         .. todo:: Implement Code 39 translation for extended ascii
         """
         normal_set = '01234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ-.$/+% '
@@ -495,7 +493,10 @@ class Formatter(object):
         Characters to encode (0-9, A-Z, -, ., $, /, +, %, ' ')
         If Scanner supports extended ASCII, must encode ^FD with +$ and -$ surrounding
 
-        :param orientation: 'N' - normal, 'R' - rotate 90, 'I' - inverted, 'B' - rotate 270
+        :param orientation: * 'N' - normal
+                            * 'R' - rotate 90
+                            * 'I' - inverted
+                            * 'B' - rotate 270
         :param check_digit: calculate and print Mod 43 check digit ('Y', 'N')
         :param height: bar code height in dots (1 to 32000)
         :param print_text: print text of data ('Y', 'N')
@@ -509,17 +510,21 @@ class Formatter(object):
         """
         Code 49 Bar Code (^B4)
 
-        :param orientation: 'N' - normal, 'R' - rotate 90, 'I' - inverted, 'B' - rotate 270
+        :param orientation: * 'N' - normal
+                            * 'R' - rotate 90
+                            * 'I' - inverted
+                            * 'B' - rotate 270
         :param height_multiplier: 1 to height of label (recommending much more than 1)
         :param print_text: print text of data ('Y', 'N')
         :param text_above: print text above barcode ('Y', 'N')
-        :param starting_mode: 0 - Regular Alphanumeric Mode
-                              1 - Multiple Read Alphanumeric
-                              2 - Regular Numeric Mode
-                              3 - Group Alphanumeric Mode
-                              4 - Regular Alphanumeric Shift 1
-                              5 - Regular Alphanumeric Shift 2
-                              A - Automatic Mode. The printer determines the starting mode by analyzing the field data.
+        :param starting_mode: * 0 - Regular Alphanumeric Mode
+                              * 1 - Multiple Read Alphanumeric
+                              * 2 - Regular Numeric Mode
+                              * 3 - Group Alphanumeric Mode
+                              * 4 - Regular Alphanumeric Shift 1
+                              * 5 - Regular Alphanumeric Shift 2
+                              * A - Automatic Mode. The printer determines the
+                                starting mode by analyzing the field data.
         """
         self.zpl.append('^B4')
 
@@ -612,7 +617,7 @@ class Formatter(object):
     def add_field_data_ean_8(self, data):
         """
         Verify and Add Field Data for EAN 8
- 
+
         :param data: data for barcode (must be numeric)
         """
         self._verify_data_numeric(data)
@@ -650,7 +655,7 @@ class Formatter(object):
     def add_field_data_code_93(self, data, extended_ascii=False):
         """
         Verify and add code 93 data
-        
+
         :param data: data for barcode
         :param extended_ascii: boolean
 
@@ -750,7 +755,7 @@ class Formatter(object):
         """
         UPS MaxiCode Bar Code
 
-        :param mode: 
+        :param mode:
             * 2 - structured carrier message: numeric postal code (U.S.)
             * 3 - structured carrier message: alphanumeric postal code (non-U.S.)
             * 4 - standard symbol, secretary
@@ -873,33 +878,33 @@ class Formatter(object):
         .. note:
 
             To encode data into a MicroPDF417 bar code, complete these steps:
-                
+
                 1. Determine the type of data to be encoded (for example, ASCII characters, numbers, 8-bit
                 data, or a combination).
-                
+
                 2. Determine the maximum amount of data to be encoded within the bar code (for
                 example, number of ASCII characters, quantity of numbers, or quantity of 8-bit data
                 characters).
-                
+
                 3. Determine the percentage of check digits that are used within the bar code. The higher
                 the percentage of check digits that are used, the more resistant the bar code is to
                 damage — however, the size of the bar code increases.
-                
+
                 4. Use Table 10 with the information gathered from the questions above to select the mode
                 of the bar code.
-    
+
              MO - mode
-             
+
              DC - Number of Data Columns
-             
+
              DR - Number of Data Rows
-             
+
              EC - % of CWS for EC
-             
+
              MX - Max Alpha Characters
-             
+
              MD - Max Digits
-    
+
             MO DC DR EC  MX  MD
              0  1 11 64   6   8
              1  1 14 50  12  17
@@ -1417,7 +1422,7 @@ class Formatter(object):
         :param micropdf417_height: height of MicroPDF417 bar code 1-255
         :param micropdf417_width: width of MicroPDF417 bar code 1-10
 
-        .. note::
+        .. note:
 
             ECI Number.
 
@@ -1430,7 +1435,7 @@ class Formatter(object):
                 * This number is not padded.
 
             Serial number.
-    
+
                 The serial number can contain up to 25 characters and is variable length.
                 The serial number is stored in the Micro-PDF symbol. If a comma follows the serial
                 number, then additional data is used below.
@@ -1439,10 +1444,10 @@ class Formatter(object):
                   This value is used if a comma follows the ECI number.
 
             Additional data.
-    
+
                 If present, it is used for things such as a country code.
                 Data cannot exceed 150 bytes. This includes serial number commas.
-    
+
                 * Additional data is stored in the Micro-PDF symbol and appended after the
                   serial number. A comma must exist between each maximum of 25 characters
                   in the additional fields.
@@ -1532,7 +1537,8 @@ class Formatter(object):
         :param rows: rows to encode 9-49
         :param format_id: * 1 = field data is numeric + space (0..9,”) – No \&
                           * 2 = field data is uppercase alphanumeric + space (A..Z,’’) – No \&’’
-                          * 3 = field data is uppercase alphanumeric + space, period, comma, dash, and slash (0..9,A..Z,“.-/”)
+                          * 3 = field data is uppercase alphanumeric + space, period, comma, dash, and slash (
+                            0..9,A..Z,“.-/”)
                           * 4 = field data is upper-case alphanumeric + space (0..9,A..Z,’’) – no \&’’
                           * 5 = field data is full 128 ASCII 7-bit set
                           * 6 = field data is full 256 ISO 8-bit set
@@ -1540,7 +1546,7 @@ class Formatter(object):
         :param aspect_ratio: * 1 = square
                              * 2 = rectangular
 
-        .. note::
+        .. note:
 
         Effects of ^BY on ^BX
 
@@ -1782,7 +1788,7 @@ class Formatter(object):
         """
         return ''.join([str(item)
                         for item
-                        in self.zpl + [self.END]])
+                        in self.zpl + [self._END]])
 
     @property
     def zpl_bytes(self):
