@@ -28,7 +28,10 @@ Simple Project to help in building ZPL2 strings for printing barcodes with Zebra
 Features
 --------
 
-* TODO: Fill out
+* Methods for adding ZPL2 entries in the label data
+* Error handling for data entered into methods, to maintain valid ZPL data
+* Using web service to render ZPL2 label as PNG for quick development
+* Simple class to print to network based ZPL label printer
 
 Credits
 ---------
