@@ -15,6 +15,9 @@ from contextlib import contextmanager
 from simple_zpl2 import Formatter
 
 
+def no_newline(formatter):
+    return formatter.zpl_text.replace('\n', '')
+
 @pytest.fixture
 def formatter():
     """Sample pytest fixture.
@@ -26,6 +29,8 @@ def formatter():
 
 def test_comment(formatter):
     formatter.add_comment('Testing Comment')
-    stripped_text = formatter.zpl_text.replace('\n', '')
-    assert stripped_text == '^XA^FXTesting Comment^FS^XZ'
+    assert no_newline(formatter) == '^XA^FXTesting Comment^FS^XZ'
 
+
+def test_fail():
+    assert True == False

@@ -1780,10 +1780,11 @@ class Formatter(object):
         self._add_line_color(color, True)
 
     @property
-    def zpl_text(self):
+    def zpl_text(self, strip_newline=False):
         """
         Renders zpl text as string for debugging.
 
+        :param strip_newline: Default False, 
         :return: text string
         """
         return ''.join([str(item)
