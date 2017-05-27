@@ -1,7 +1,7 @@
-Printer
+NetworkPrinter
 ---------
 
-.. automodule:: simple_zpl2.printer
+.. automodule:: simple_zpl2.NetworkPrinter
     :members:
     :undoc-members:
     :show-inheritance:
