@@ -1,5 +1,5 @@
-Formatter
----------
+ZPLDocument
+-----------
 
 .. automodule:: simple_zpl2.zpl_document
     :members:
