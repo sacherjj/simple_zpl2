@@ -1,6 +1,8 @@
-ZPLDocument
------------
+Formatter
+---------
 
-.. automodule:: zpl_document
+.. automodule:: simple_zpl2.zpl_document.*
     :members:
+    :undoc-members:
     :inherited-members:
+    :show-inheritance:
