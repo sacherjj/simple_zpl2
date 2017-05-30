@@ -2011,7 +2011,7 @@ class ZPLDocument(_BaseZPL):
         self._add_int_value_in_range(y_pos, 'y_pos', 0, 32000, True)
 
     @_newline_after
-    def add_field_origin(self, x_pos: int=0, y_pos: int=0, justification=None) -> None:
+    def add_field_origin(self, x_pos=0, y_pos=0, justification=None):
         """
         Field Origin (^FO)
 
