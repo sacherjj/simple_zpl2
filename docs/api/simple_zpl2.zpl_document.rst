@@ -1,8 +1,5 @@
 ZPLDocument
 -----------
 
-.. autoclass:: simple_zpl2.zpl_document
+.. automodule:: zpl_document
     :members:
-    :undoc-members:
-    :inherited-members:
-    :show-inheritance:

@@ -1,6 +1,5 @@
 NetworkPrinter
 --------------
 
-.. automodule:: simple_zpl2.printer
+.. autoclass:: printer
     :members:
-    :undoc-members:

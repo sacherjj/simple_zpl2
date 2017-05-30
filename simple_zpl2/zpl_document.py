@@ -148,7 +148,7 @@ class _BaseZPL(object):
         return data
 
     @_newline_after
-    def add_field_data(self, data_list, replace_newlines=False):
+    def _add_field_data(self, data_list, replace_newlines=False):
         """
         Field Data for Text or Barcode (^FD with 1-many ^FS)
 
@@ -164,7 +164,7 @@ class _BaseZPL(object):
         self.zpl.append('^FD{}^FS'.format(data))
 
     @_newline_after
-    def add_field_block(self, width=None, max_lines=None, dots_between_lines=None,
+    def _add_field_block(self, width=None, max_lines=None, dots_between_lines=None,
                         text_justification=None, hanging_indent=None):
         """
         Field Block (^FB)
@@ -937,11 +937,11 @@ class CODABLOCK_Barcode(_Barcode):
 
 class Code128_Barcode(_1DBarcode):
 
-    START_CODE_A = 103
-    START_CODE_B = 104
-    START_CODE_C = 105
+    _START_CODE_A = 103
+    _START_CODE_B = 104
+    _START_CODE_C = 105
 
-    INV_CODES = {'><': 62, '>0': 30, '>=': 94, '>1': 95, '>2': 96,
+    _INV_CODES = {'><': 62, '>0': 30, '>=': 94, '>1': 95, '>2': 96,
                  '>3': 97, '>4': 98, '>5': 99, '>6': 100, '>7': 101,
                  '>8': 102, '>9': 103, '>:': 104, '>;': 105}
 
@@ -975,14 +975,14 @@ class Code128_Barcode(_1DBarcode):
     def _validate_data(self):
         start = ord(self.data[0])
         try:
-            inv_code = self.INV_CODES[self.data[:1]]
+            inv_code = self._INV_CODES[self.data[:1]]
         except:
             inv_code = None
-        if start == self.START_CODE_A or inv_code == self.START_CODE_A:
+        if start == self._START_CODE_A or inv_code == self._START_CODE_A:
             raise NotImplementedError('Code A mode not implemented.')
-        if start == self.START_CODE_C or inv_code == self.START_CODE_C:
+        if start == self._START_CODE_C or inv_code == self._START_CODE_C:
             raise NotImplementedError('Code C mode not implemented.')
-        for value in self.INV_CODES.keys():
+        for value in self._INV_CODES.keys():
             if value in self.data:
                 raise NotImplementedError('Invocation Characters not implemented')
 
@@ -1963,6 +1963,32 @@ class ZPLDocument(_BaseZPL):
         if character_width is None:
             return
         self._add_int_value_in_range(character_width, 'character_width', 10, 32000, True)
+
+    def add_field_block(self, width, max_lines, dots_between_lines, text_justification):
+        """
+        Field Block (^FB)
+
+        :param width: width of text 0 to label width
+        :param max_lines: max number of lines in block, 1 to 9999
+        :param dots_between_lines: dots between line adjustment -9999 to 9999
+        :param text_justification:
+            * 'L' - Left
+            * 'C' - center
+            * 'R' - right
+            * 'J' - justified
+        :param hanging_indent: 0 to 9999
+        """
+        self._add_field_block(width, max_lines, dots_between_lines, text_justification)
+
+    def add_field_data(self, data_list, replace_newlines=False):
+        """
+        Field Data for Text or Barcode (^FD with 1-many ^FS)
+
+        :param data_list:  if list or tuple, multiple data blocks with '^FS' separator
+                           otherwise, single field with value
+        :param replace_newlines: If true, replaces \n with \&
+        """
+        self._add_field_data(data_list, replace_newlines)
 
     @_newline_after
     def add_zpl_raw(self, zpl_data):
