@@ -1,14 +1,15 @@
 from PIL import Image
 import io
-from simple_zpl2 import Formatter
+from simple_zpl2 import ZPLDocument, Code128_Barcode
 
 # Build up ZPL label
-zpl = Formatter()
+zpl = ZPLDocument()
 
 zpl.add_comment("Barcode and text")
 zpl.add_field_origin(20, 20)
-zpl.add_barcode_code_128(zpl.ORIENTATION_NORMAL, 30, 'Y')
-zpl.add_field_data('TEST BARCODE')
+code128_data = 'TEST BARCODE'
+bc = Code128_Barcode(code128_data, zpl.ORIENTATION_NORMAL, 30, 'Y')
+zpl.add_barcode(bc)
 
 zpl.add_comment('Just Text')
 zpl.add_field_origin(20, 100)
