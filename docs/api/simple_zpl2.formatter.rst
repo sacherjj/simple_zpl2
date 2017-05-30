@@ -1,7 +1,7 @@
 Formatter
 ---------
 
-.. automodule:: simple_zpl2.formatter
+.. automodule:: simple_zpl2.formatter.*
     :members:
     :undoc-members:
     :inherited-members:
