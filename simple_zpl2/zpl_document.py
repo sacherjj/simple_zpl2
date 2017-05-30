@@ -59,8 +59,7 @@ class _BaseZPL(object):
         value = int(value)  # May raise ValueError
         self.zpl.append(str(value))
 
-    def _add_int_value_in_range(self, value: int, field: str, min_value: int,
-                                max_value: int, comma: bool, reset_back: bool=False) -> None:
+    def _add_int_value_in_range(self, value, field, min_value, max_value, comma, reset_back=False):
         """
         Add a value that should be an integer within a range
 
