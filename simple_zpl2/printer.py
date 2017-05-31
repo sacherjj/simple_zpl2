@@ -4,15 +4,12 @@ import socket
 class NetworkPrinter(object):
     """
     Object to send ZPL to zebra network printer using sockets
+
+    :param ip_address: printer network address as 'xxx.xxx.xxx.xxx'
+    :param port: port of printer as int (default 9100)
     """
 
     def __init__(self, ip_address, port=9100):
-        """
-        Constructor
-
-        :param ip_address: printer network address as 'xxx.xxx.xxx.xxx'
-        :param port: port of printer as int (default 9100)
-        """
         self.ip = ip_address
         self.port = port
 
@@ -22,7 +19,6 @@ class NetworkPrinter(object):
 
         :param label_formatter: Formatter object, fully build for label.
         :param timeout: Socket timeout for printer connection, default 10.
-        :return: None
         """
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.settimeout(timeout)
