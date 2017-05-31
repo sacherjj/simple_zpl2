@@ -164,8 +164,8 @@ class _BaseZPL(object):
         self.zpl.append('^FD{}^FS'.format(data))
 
     @_newline_after
-    def _add_field_block(self, width=None, max_lines=None, dots_between_lines=None,
-                         text_justification=None, hanging_indent=None):
+    def _add_field_block(self, width=0, max_lines=1, dots_between_lines=0,
+                         text_justification='L', hanging_indent=0):
         """
         Field Block (^FB)
 
@@ -180,25 +180,11 @@ class _BaseZPL(object):
         :param hanging_indent: 0 to 9999
         """
         self.zpl.append('^FB')
-
-        if width is None:
-            return
-        self._add_int(width)
-
-        if max_lines is None:
-            return
-        self._add_int_value_in_range(max_lines, 'max_lines', 1, 9999, True, False)
-
-        if dots_between_lines is None:
-            return
-        self._add_int_value_in_range(dots_between_lines, 'dots_between_lines', -9999, 9999, True, False)
-
-        if text_justification is None:
-            return
+        max_label_width = 4 * 600 * 2  # 4" x 600 dpi doubled
+        self._add_int_value_in_range(width, 'width', 0, max_label_width, False)
+        self._add_int_value_in_range(max_lines, 'max_lines', 1, 9999, True)
+        self._add_int_value_in_range(dots_between_lines, 'dots_between_lines', -9999, 9999, True)
         self._add_value_in_list(text_justification, 'text_justification', ('L', 'C', 'R', 'J'), True)
-
-        if hanging_indent is None:
-            return
         self._add_int_value_in_range(hanging_indent, 'hanging_indent', 0, 9999, True, False)
 
 
@@ -2032,7 +2018,8 @@ class ZPLDocument(_BaseZPL):
             return
         self._add_int_value_in_range(character_width, 'character_width', 10, 32000, True)
 
-    def add_field_block(self, width, max_lines, dots_between_lines, text_justification):
+    def add_field_block(self, width=0, max_lines=1, dots_between_lines=0,
+                        text_justification='L', hanging_indent=0):
         """
         Field Block (^FB)
 
@@ -2046,7 +2033,8 @@ class ZPLDocument(_BaseZPL):
             * 'J' - justified
         :param hanging_indent: 0 to 9999
         """
-        self._add_field_block(width, max_lines, dots_between_lines, text_justification)
+        self._add_field_block(width, max_lines, dots_between_lines,
+                              text_justification, hanging_indent)
 
     def add_field_data(self, data_list, replace_newlines=False):
         """
