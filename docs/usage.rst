@@ -10,7 +10,7 @@ validation.  These are added to the ZPLDocument via `.add_barcode` method.
 
 To use Simple ZPL2 in a project::
 
-    from simple_zpl2 import ZPLDocument
+    from simple_zpl2 import ZPLDocument, Code128_Barcode
 
     # Each label is built with a ZPLDocument object
     zdoc = ZPLDocument()
