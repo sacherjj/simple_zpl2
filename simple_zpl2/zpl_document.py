@@ -165,7 +165,7 @@ class _BaseZPL(object):
 
     @_newline_after
     def _add_field_block(self, width=None, max_lines=None, dots_between_lines=None,
-                        text_justification=None, hanging_indent=None):
+                         text_justification=None, hanging_indent=None):
         """
         Field Block (^FB)
 
@@ -213,7 +213,7 @@ class _Barcode(_BaseZPL):
     def _add_data(self):
         self._validate_data()
         self._process_data()
-        self.add_field_data(self.data)
+        self._add_field_data(self.data)
 
     def _validate_data(self):
         """
@@ -518,7 +518,7 @@ class Code49_Barcode(_Barcode):
         """
         super().__init__(data)
         self._initial_build(orientation, height_multiplier, print_text, text_above, starting_mode)
-        self.add_field_data(data)
+        self._add_field_data(data)
 
     def _initial_build(self, orientation, height_multiplier, print_text, text_above, starting_mode):
         self.zpl.append('^B4')
@@ -590,7 +590,7 @@ class Aztec_Barcode(_Barcode):
         super().__init__(data)
         self._initial_build(orientation, magnification, ecic, ec_symbol_size,
                             menu_symbol, number_of_symbols, structured_id_append)
-        self.add_field_data(data)
+        self._add_field_data(data)
 
     def _initial_build(self, orientation, magnification, ecic, ec_symbol_size,
                        menu_symbol, number_of_symbols, structured_id_append):
@@ -684,7 +684,7 @@ class PDF417_Barcode(_PDF_Barcode):
         super().__init__(data)
         self._initial_build(orientation, height, security_level,
                             data_column_count, row_count, truncate)
-        self.add_field_data(data)
+        self._add_field_data(data)
 
     def _initial_build(self, orientation, height, security_level,
                        data_column_count, row_count, truncate):
@@ -810,32 +810,32 @@ class MicroPDF417_Barcode(_PDF_Barcode):
 
 class Code93_Barcode(_1DBarcode):
 
-    ENC_MAP = {0: "'U", 1: '&A', 2: '&B', 3: '&C', 4: '&D',
-               5: '&E', 6: '&F', 7: '&G', 8: '&H', 9: '&I',
-               10: '&J', 11: '&K', 12: '&L', 13: '&M', 14: '&N',
-               15: '&O', 16: '&P', 17: '&Q', 18: '&R', 19: '&S',
-               20: '&T', 21: '&U', 22: '&V', 23: '&W', 24: '&X',
-               25: '&Y', 26: '&Z', 27: "'A", 28: "'B", 29: "'C",
-               30: "'D", 31: "'E", 32: ' ', 33: '(A', 34: '(B',
-               35: '(C', 36: '(D', 37: '(E', 38: '(F', 39: '(G',
-               40: '(H', 41: '(I', 42: '(J', 43: '+', 44: '(L',
-               45: '-', 46: '.', 47: '/', 48: '0', 49: '1',
-               50: '2', 51: '3', 52: '4', 53: '5', 54: '6',
-               55: '7', 56: '8', 57: '9', 58: '(Z', 59: "'F",
-               60: "'G", 61: "'H", 62: "'I", 63: "'J", 64: "'V",
-               65: 'A', 66: 'B', 67: 'C', 68: 'D', 69: 'E',
-               70: 'F', 71: 'G', 72: 'H', 73: 'I', 74: 'J',
-               75: 'K', 76: 'L', 77: 'M', 78: 'N', 79: 'O',
-               80: 'P', 81: 'Q', 82: 'R', 83: 'S', 84: 'T',
-               85: 'U', 86: 'V', 87: 'W', 88: 'X', 89: 'Y',
-               90: 'Z', 91: "'K", 92: "'L", 93: "'M", 94: "'N",
-               95: "'O", 96: "'W", 97: ')A', 98: ')B', 99: ')C',
-               100: ')D', 101: ')E', 102: ')F', 103: ')G', 104: ')H',
-               105: ')I', 106: ')J', 107: ')K', 108: ')L', 109: ')M',
-               110: ')N', 111: ')O', 112: ')P', 113: ')Q', 114: ')R',
-               115: ')S', 116: ')T', 117: ')U', 118: ')V', 119: ')W',
-               120: ')X', 121: ')Y', 122: ')Z', 123: "'P", 124: "'Q",
-               125: "'R", 126: "'S", 127: "'T"}
+    _ENC_MAP = {0: "'U", 1: '&A', 2: '&B', 3: '&C', 4: '&D',
+                5: '&E', 6: '&F', 7: '&G', 8: '&H', 9: '&I',
+                10: '&J', 11: '&K', 12: '&L', 13: '&M', 14: '&N',
+                15: '&O', 16: '&P', 17: '&Q', 18: '&R', 19: '&S',
+                20: '&T', 21: '&U', 22: '&V', 23: '&W', 24: '&X',
+                25: '&Y', 26: '&Z', 27: "'A", 28: "'B", 29: "'C",
+                30: "'D", 31: "'E", 32: ' ', 33: '(A', 34: '(B',
+                35: '(C', 36: '(D', 37: '(E', 38: '(F', 39: '(G',
+                40: '(H', 41: '(I', 42: '(J', 43: '+', 44: '(L',
+                45: '-', 46: '.', 47: '/', 48: '0', 49: '1',
+                50: '2', 51: '3', 52: '4', 53: '5', 54: '6',
+                55: '7', 56: '8', 57: '9', 58: '(Z', 59: "'F",
+                60: "'G", 61: "'H", 62: "'I", 63: "'J", 64: "'V",
+                65: 'A', 66: 'B', 67: 'C', 68: 'D', 69: 'E',
+                70: 'F', 71: 'G', 72: 'H', 73: 'I', 74: 'J',
+                75: 'K', 76: 'L', 77: 'M', 78: 'N', 79: 'O',
+                80: 'P', 81: 'Q', 82: 'R', 83: 'S', 84: 'T',
+                85: 'U', 86: 'V', 87: 'W', 88: 'X', 89: 'Y',
+                90: 'Z', 91: "'K", 92: "'L", 93: "'M", 94: "'N",
+                95: "'O", 96: "'W", 97: ')A', 98: ')B', 99: ')C',
+                100: ')D', 101: ')E', 102: ')F', 103: ')G', 104: ')H',
+                105: ')I', 106: ')J', 107: ')K', 108: ')L', 109: ')M',
+                110: ')N', 111: ')O', 112: ')P', 113: ')Q', 114: ')R',
+                115: ')S', 116: ')T', 117: ')U', 118: ')V', 119: ')W',
+                120: ')X', 121: ')Y', 122: ')Z', 123: "'P", 124: "'Q",
+                125: "'R", 126: "'S", 127: "'T"}
 
     def __init__(self, data, orientation=None, height=None,
                  print_text=None, text_above=None, check_digit=None,
@@ -864,7 +864,7 @@ class Code93_Barcode(_1DBarcode):
     def _process_data(self):
         if self.extended_ascii:
             # Need to surround with +$ and -$ and translate
-            self.data = ''.join(['+$'] + [self.ENC_MAP[ord(char)]
+            self.data = ''.join(['+$'] + [self._ENC_MAP[ord(char)]
                                           for char in list(self.data)] + ['-$'])
 
 
@@ -942,8 +942,8 @@ class Code128_Barcode(_1DBarcode):
     _START_CODE_C = 105
 
     _INV_CODES = {'><': 62, '>0': 30, '>=': 94, '>1': 95, '>2': 96,
-                 '>3': 97, '>4': 98, '>5': 99, '>6': 100, '>7': 101,
-                 '>8': 102, '>9': 103, '>:': 104, '>;': 105}
+                  '>3': 97, '>4': 98, '>5': 99, '>6': 100, '>7': 101,
+                  '>8': 102, '>9': 103, '>:': 104, '>;': 105}
 
     def __init__(self, data, orientation, height=None, print_text=None,
                  text_above=None, check_digit=None):
@@ -1343,7 +1343,7 @@ class DataMatrix_Barcode(_Barcode):
         self._initial_setup(orientation, height, quality, columns,
                            rows, format_id, escape_sequence, aspect_ratio)
         # TODO: Validation of data
-        self.add_field_data(data)
+        self._add_field_data(data)
 
     def _initial_setup(self, orientation, height, quality, columns,
                        rows, format_id, escape_sequence, aspect_ratio):
@@ -1526,14 +1526,14 @@ class TLC39_Barcode(_BaseZPL):
         data.append(eci_number)
 
         if serial_number is None:
-            self.add_field_data(','.join(data))
+            self._add_field_data(','.join(data))
             return
         if not (1 <= len(serial_number) <= 26 and serial_number.isalnum()):
             raise ValueError('serial_number must be alphanumeric between 1 and 26 characters.')
         data.append(serial_number)
 
         if additional_data is None:
-            self.add_field_data(','.join(data))
+            self._add_field_data(','.join(data))
             return
 
         if type(additional_data) in (tuple, list):
@@ -1554,7 +1554,7 @@ class TLC39_Barcode(_BaseZPL):
             raise ValueError('additional_data must be alphanumeric.')
         data.append(ad_joined)
 
-        self.add_field_data(','.join(data))
+        self._add_field_data(','.join(data))
 
 
 class QR_Barcode(_Barcode):
