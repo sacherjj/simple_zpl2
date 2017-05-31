@@ -229,24 +229,22 @@ class _Barcode(_BaseZPL):
 
 
 class _1DBarcode(_Barcode):
+    """
+    Common Barcode output for 1D barcodes
+
+    :param zpl_code: code for bar code type.  (ex: 'BZ','BE')
+    :param orientation: * 'N' - normal
+                        * 'R' - rotate 90
+                        * 'I' - inverted
+                        * 'B' - rotate 270
+    :param height: bar code height in dots (1 to 32000)
+    :param print_text: print text of data ('Y', 'N')
+    :param text_above: print text above barcode ('Y', 'N')
+    """
 
     def __init__(self, zpl_code, data, orientation=None, check_digit_one=None,
                  height=None, print_text=None, text_above=None,
                  check_digit_two=None):
-        """
-        Common Barcode output for 1D barcodes
-
-        :param zpl_code: code for bar code type.  (ex: 'BZ','BE')
-        :param orientation: * 'N' - normal
-                            * 'R' - rotate 90
-                            * 'I' - inverted
-                            * 'B' - rotate 270
-        :param height: bar code height in dots (1 to 32000)
-        :param print_text: print text of data ('Y', 'N')
-        :param text_above: print text above barcode ('Y', 'N')
-        :return: * True if all fields used and can add additional
-                 * False if any additional fields should be ignored
-        """
         super().__init__(data)
         self._initial_build(zpl_code, orientation, check_digit_one,
                             height, print_text, text_above, check_digit_two)
@@ -281,25 +279,25 @@ class _1DBarcode(_Barcode):
 
 
 class Code11_Barcode(_1DBarcode):
+    """
+    Code 11 Bar Code (^B1)
+
+    Characters to encode (0-9 and -)
+
+    :param data: data for barcode
+    :param orientation: * 'N' - normal
+                        * 'R' - rotate 90
+                        * 'I' - inverted
+                        * 'B' - rotate 270
+    :param check_digit: * 'Y' - 1 digit
+                        * 'N' - 2 digits
+    :param height: bar code height in dots (1 to 32000)
+    :param print_text: print text of data ('Y', 'N')
+    :param text_above: print text above barcode ('Y', 'N')
+    """
 
     def __init__(self, data, orientation=None, check_digit=None,
                  height=None, print_text=None, text_above=None):
-        """
-        Code 11 Bar Code (^B1)
-
-        Characters to encode (0-9 and -)
-
-        :param data: data for barcode
-        :param orientation: * 'N' - normal
-                            * 'R' - rotate 90
-                            * 'I' - inverted
-                            * 'B' - rotate 270
-        :param check_digit: * 'Y' - 1 digit
-                            * 'N' - 2 digits
-        :param height: bar code height in dots (1 to 32000)
-        :param print_text: print text of data ('Y', 'N')
-        :param text_above: print text above barcode ('Y', 'N')
-        """
         super().__init__('B1', data, orientation, check_digit, height, print_text, text_above, None)
 
     def _validate_data(self):
@@ -307,24 +305,24 @@ class Code11_Barcode(_1DBarcode):
 
 
 class Interleaved2of5_Barcode(_1DBarcode):
+    """
+    Interleaved 2 of 5 Bar Code (^B2)
+
+    Characters to encode (0-9)
+
+    :param data: data for barcode
+    :param orientation: * 'N' - normal
+                        * 'R' - rotate 90
+                        * 'I' - inverted
+                        * 'B' - rotate 270
+    :param height: bar code height in dots (1 to 32000)
+    :param print_text: print text of data ('Y', 'N')
+    :param text_above: print text above barcode ('Y', 'N')
+    :param check_digit: calculate and print Mod 10 check digit ('Y', 'N')
+    """
 
     def __init__(self, data, orientation=None, height=None,
                  print_text=None, text_above=None, check_digit=None):
-        """
-        Interleaved 2 of 5 Bar Code (^B2)
-
-        Characters to encode (0-9)
-
-        :param data: data for barcode
-        :param orientation: * 'N' - normal
-                            * 'R' - rotate 90
-                            * 'I' - inverted
-                            * 'B' - rotate 270
-        :param height: bar code height in dots (1 to 32000)
-        :param print_text: print text of data ('Y', 'N')
-        :param text_above: print text above barcode ('Y', 'N')
-        :param check_digit: calculate and print Mod 10 check digit ('Y', 'N')
-        """
         super().__init__('B2', data, orientation, None, height, print_text, text_above, check_digit)
 
     def _validate_data(self):
@@ -332,19 +330,19 @@ class Interleaved2of5_Barcode(_1DBarcode):
 
 
 class Industrial2of5_Barcode(_1DBarcode):
+    """
+    Industrial 2 of 5 Bar Code (^BI)
+
+    Characters to encode (0-9)
+
+    :param orientation: 'N' - normal, 'R' - rotate 90, 'I' - inverted, 'B' - rotate 270
+    :param height: bar code height in dots (1 to 32000)
+    :param print_text: print text of data ('Y', 'N')
+    :param text_above: print text above barcode ('Y', 'N')
+    """
 
     def __init__(self, data, orientation=None, height=None,
                  print_text=None, text_above=None):
-        """
-        Industrial 2 of 5 Bar Code (^BI)
-
-        Characters to encode (0-9)
-
-        :param orientation: 'N' - normal, 'R' - rotate 90, 'I' - inverted, 'B' - rotate 270
-        :param height: bar code height in dots (1 to 32000)
-        :param print_text: print text of data ('Y', 'N')
-        :param text_above: print text above barcode ('Y', 'N')
-        """
         super().__init__('BI', data, orientation, height, print_text, text_above)
 
     def _verify_data(self):
@@ -352,20 +350,20 @@ class Industrial2of5_Barcode(_1DBarcode):
 
 
 class Standard2of5_Barcode(_1DBarcode):
+    """
+    Standard 2 of 5 Bar Code (^BJ)
+
+    Characters to encode (0-9)
+
+    :param data: barcode data numeric characters
+    :param orientation: 'N' - normal, 'R' - rotate 90, 'I' - inverted, 'B' - rotate 270
+    :param height: bar code height in dots (1 to 32000)
+    :param print_text: print text of data ('Y', 'N')
+    :param text_above: print text above barcode ('Y', 'N')
+    """
 
     def __init__(self, data, orientation=None, height=None,
                  print_text=None, text_above=None):
-        """
-        Standard 2 of 5 Bar Code (^BJ)
-
-        Characters to encode (0-9)
-
-        :param data: barcode data numeric characters
-        :param orientation: 'N' - normal, 'R' - rotate 90, 'I' - inverted, 'B' - rotate 270
-        :param height: bar code height in dots (1 to 32000)
-        :param print_text: print text of data ('Y', 'N')
-        :param text_above: print text above barcode ('Y', 'N')
-        """
         super().__init__('BJ', data, orientation, None, height, print_text, text_above)
 
     def _validate_data(self):
@@ -373,6 +371,23 @@ class Standard2of5_Barcode(_1DBarcode):
 
 
 class Code39_Barcode(_1DBarcode):
+    """
+    Code 39 Bar Code (^B3)
+
+    Characters to encode (0-9, A-Z, -, ., $, /, +, %, ' ') with normal.
+
+    If scanner supports extended ASCII, with encode with +$ and -$
+
+    :param data: data for barcode
+    :param orientation: * 'N' - normal
+                        * 'R' - rotate 90
+                        * 'I' - inverted
+                        * 'B' - rotate 270
+    :param check_digit: calculate and print Mod 43 check digit ('Y', 'N')
+    :param height: bar code height in dots (1 to 32000)
+    :param print_text: print text of data ('Y', 'N')
+    :param text_above: print text above barcode ('Y', 'N')
+    """
 
     _EXTENDED_MAP = {1: '$A', 2: '$B', 3: '$C', 4: '$D', 5: '$E',
                      6: '$F', 7: '$G', 8: '$H', 9: '$I', 10: '$J',
@@ -402,23 +417,6 @@ class Code39_Barcode(_1DBarcode):
 
     def __init__(self, data, orientation=None, check_digit=None, height=None,
                  print_text=None, text_above=None, extended_ascii=False):
-        """
-        Code 39 Bar Code (^B3)
-
-        Characters to encode (0-9, A-Z, -, ., $, /, +, %, ' ') with normal.
-
-        If scanner supports extended ASCII, with encode with +$ and -$
-
-        :param data: data for barcode
-        :param orientation: * 'N' - normal
-                            * 'R' - rotate 90
-                            * 'I' - inverted
-                            * 'B' - rotate 270
-        :param check_digit: calculate and print Mod 43 check digit ('Y', 'N')
-        :param height: bar code height in dots (1 to 32000)
-        :param print_text: print text of data ('Y', 'N')
-        :param text_above: print text above barcode ('Y', 'N')
-        """
         self.extended_ascii = extended_ascii
         super().__init__('B3', data, orientation, check_digit, height, print_text, text_above)
 
@@ -436,18 +434,18 @@ class Code39_Barcode(_1DBarcode):
 
 
 class PlanetCode_Barcode(_1DBarcode):
+    """
+    Planet Code Bar Code (^B5)
+
+    :param data: data for barcode
+    :param orientation: 'N' - normal, 'R' - rotate 90, 'I' - inverted, 'B' - rotate 270
+    :param height: bar code height in dots (1 to 9999)
+    :param print_text: print text of data ('Y', 'N')
+    :param text_above: print text above barcode ('Y', 'N')
+    """
 
     def __init__(self, data, orientation=None, height=None,
                  print_text=None, text_above=None):
-        """
-        Planet Code Bar Code (^B5)
-
-        :param data: data for barcode
-        :param orientation: 'N' - normal, 'R' - rotate 90, 'I' - inverted, 'B' - rotate 270
-        :param height: bar code height in dots (1 to 9999)
-        :param print_text: print text of data ('Y', 'N')
-        :param text_above: print text above barcode ('Y', 'N')
-        """
         super().__init__('B5', data, orientation, None, height, print_text, text_above)
 
     def _validate_data(self):
@@ -455,17 +453,17 @@ class PlanetCode_Barcode(_1DBarcode):
 
 
 class EAN8_Barcode(_1DBarcode):
+    """
+    EAN 8 Bar Code (^B8)
+
+    :param data: data for barcode
+    :param orientation: 'N' - normal, 'R' - rotate 90, 'I' - inverted, 'B' - rotate 270
+    :param height: bar code height in dots (1 to 32000)
+    :param print_text: print text of data ('Y', 'N')
+    :param text_above: print text above barcode ('Y', 'N')
+    """
 
     def __init__(self, data, orientation=None, height=None, print_text=None, text_above=None):
-        """
-        EAN 8 Bar Code (^B8)
-
-        :param data: data for barcode
-        :param orientation: 'N' - normal, 'R' - rotate 90, 'I' - inverted, 'B' - rotate 270
-        :param height: bar code height in dots (1 to 32000)
-        :param print_text: print text of data ('Y', 'N')
-        :param text_above: print text above barcode ('Y', 'N')
-        """
         super().__init__('B8', data, orientation, None, height, print_text, text_above)
 
     def _validate_data(self):
@@ -473,19 +471,19 @@ class EAN8_Barcode(_1DBarcode):
 
 
 class UPC_Barcode(_1DBarcode):
+    """
+    UPC-E Bar Code (^B9)
+
+    :param data: data for barcode
+    :param orientation: 'N' - normal, 'R' - rotate 90, 'I' - inverted, 'B' - rotate 270
+    :param height: bar code height in dots (1 to 32000)
+    :param print_text: print text of data ('Y', 'N')
+    :param text_above: print text above barcode ('Y', 'N')
+    :param check_digit: print check digit ('Y', 'N')
+    """
 
     def __init__(self, data, orientation=None, height=None, print_text=None,
                  text_above=None, check_digit=None):
-        """
-        UPC-E Bar Code (^B9)
-
-        :param data: data for barcode
-        :param orientation: 'N' - normal, 'R' - rotate 90, 'I' - inverted, 'B' - rotate 270
-        :param height: bar code height in dots (1 to 32000)
-        :param print_text: print text of data ('Y', 'N')
-        :param text_above: print text above barcode ('Y', 'N')
-        :param check_digit: print check digit ('Y', 'N')
-        """
         super().__init__('B9', orientation, None, height, print_text, text_above, check_digit)
 
     def _validate_data(self):
@@ -493,29 +491,29 @@ class UPC_Barcode(_1DBarcode):
 
 
 class Code49_Barcode(_Barcode):
+    """
+    Code 49 Bar Code (^B4)
+
+    :param data: data for barcode
+    :param orientation: * 'N' - normal
+                        * 'R' - rotate 90
+                        * 'I' - inverted
+                        * 'B' - rotate 270
+    :param height_multiplier: 1 to height of label (recommending much more than 1)
+    :param print_text: print text of data ('Y', 'N')
+    :param text_above: print text above barcode ('Y', 'N')
+    :param starting_mode: * 0 - Regular Alphanumeric Mode
+                          * 1 - Multiple Read Alphanumeric
+                          * 2 - Regular Numeric Mode
+                          * 3 - Group Alphanumeric Mode
+                          * 4 - Regular Alphanumeric Shift 1
+                          * 5 - Regular Alphanumeric Shift 2
+                          * A - Automatic Mode. The printer determines the
+                            starting mode by analyzing the field data.
+    """
 
     def __init__(self, data, orientation=None, height_multiplier=None, print_text=None,
                  text_above=None, starting_mode=None):
-        """
-        Code 49 Bar Code (^B4)
-
-        :param data: data for barcode
-        :param orientation: * 'N' - normal
-                            * 'R' - rotate 90
-                            * 'I' - inverted
-                            * 'B' - rotate 270
-        :param height_multiplier: 1 to height of label (recommending much more than 1)
-        :param print_text: print text of data ('Y', 'N')
-        :param text_above: print text above barcode ('Y', 'N')
-        :param starting_mode: * 0 - Regular Alphanumeric Mode
-                              * 1 - Multiple Read Alphanumeric
-                              * 2 - Regular Numeric Mode
-                              * 3 - Group Alphanumeric Mode
-                              * 4 - Regular Alphanumeric Shift 1
-                              * 5 - Regular Alphanumeric Shift 2
-                              * A - Automatic Mode. The printer determines the
-                                starting mode by analyzing the field data.
-        """
         super().__init__(data)
         self._initial_build(orientation, height_multiplier, print_text, text_above, starting_mode)
         self._add_field_data(data)
@@ -561,32 +559,32 @@ class Code49_Barcode(_Barcode):
 
 
 class Aztec_Barcode(_Barcode):
+    """
+    Aztec Barcode (^B0 [zero] or ^BO [letter])
+
+    :param data: data for barcode
+    :param orientation: * 'N' - normal
+                        * 'R' - rotate 90
+                        * 'I' - inverted
+                        * 'B' - rotate 270
+    :param magnification: 1 to 10
+    :param ecic: * 'Y' - data contains ECICs
+                 * 'N' - does not contain ECICs
+    :param ec_symbol_size: * 0 - default error correction
+                           * 01-99 - error correction percentage
+                           * 101-104 - 1-4 layer compact symbol
+                           * 201-232 - 1-32 layer full-range symbol
+                           * 300 - simple Aztec "Rune"
+    :param menu_symbol: * 'Y' - a menu or barcode reader initialization sybmol
+                        * 'N' - not menu symbol
+    :param number_of_symbols: Structured append 1-26 sybmols
+    :param structured_id_append: up to 24 character ID data
+    """
 
     def __init__(self, data, orientation=None, magnification=None,
                  ecic=None, ec_symbol_size=None,
                  menu_symbol=None, number_of_symbols=None,
                  structured_id_append=None):
-        """
-        Aztec Barcode (^B0 [zero] or ^BO [letter])
-
-        :param data: data for barcode
-        :param orientation: * 'N' - normal
-                            * 'R' - rotate 90
-                            * 'I' - inverted
-                            * 'B' - rotate 270
-        :param magnification: 1 to 10
-        :param ecic: * 'Y' - data contains ECICs
-                     * 'N' - does not contain ECICs
-        :param ec_symbol_size: * 0 - default error correction
-                               * 01-99 - error correction percentage
-                               * 101-104 - 1-4 layer compact symbol
-                               * 201-232 - 1-32 layer full-range symbol
-                               * 300 - simple Aztec "Rune"
-        :param menu_symbol: * 'Y' - a menu or barcode reader initialization sybmol
-                            * 'N' - not menu symbol
-        :param number_of_symbols: Structured append 1-26 sybmols
-        :param structured_id_append: up to 24 character ID data
-        """
         super().__init__(data)
         self._initial_build(orientation, magnification, ecic, ec_symbol_size,
                             menu_symbol, number_of_symbols, structured_id_append)
@@ -664,23 +662,23 @@ class _PDF_Barcode(_Barcode):
 
 
 class PDF417_Barcode(_PDF_Barcode):
+    """
+    PDF417 Bar Code (^B7)
+
+    :param data: data for barcode
+    :param orientation: * 'N' - normal
+                        * 'R' - rotate 90
+                        * 'I' - inverted
+                        * 'B' - rotate 270
+    :param height:  height of individual dots, recommends larger than 1
+    :param security_level: 0 - error detection only, 1-8 correction level
+    :param data_column_count: number of code word columns (1-30)
+    :param row_count: number of rows to encode (3-90)
+    :param truncate: truncate right row indicators and stop pattern ('Y', 'N')
+    """
 
     def __init__(self, data, orientation=None, height=None, security_level=None,
                  data_column_count=None, row_count=None, truncate=None):
-        """
-        PDF417 Bar Code (^B7)
-
-        :param data: data for barcode
-        :param orientation: * 'N' - normal
-                            * 'R' - rotate 90
-                            * 'I' - inverted
-                            * 'B' - rotate 270
-        :param height:  height of individual dots, recommends larger than 1
-        :param security_level: 0 - error detection only, 1-8 correction level
-        :param data_column_count: number of code word columns (1-30)
-        :param row_count: number of rows to encode (3-90)
-        :param truncate: truncate right row indicators and stop pattern ('Y', 'N')
-        """
         super().__init__(data)
         self._initial_build(orientation, height, security_level,
                             data_column_count, row_count, truncate)
@@ -716,82 +714,82 @@ class PDF417_Barcode(_PDF_Barcode):
 
 
 class MicroPDF417_Barcode(_PDF_Barcode):
+    """
+    MicroPDF417 Bar Code (^BF)
+
+    :param data: data for barcode
+    :param orientation: 'N' - normal, 'R' - rotate 90, 'I' - inverted, 'B' - rotate 270
+    :param height: bar code height in dots (1 to 9999)
+    :param mode: 0-33
+
+    .. note::
+
+        To encode data into a MicroPDF417 bar code, complete these steps:
+
+            1. Determine the type of data to be encoded (for example, ASCII characters, numbers, 8-bit
+            data, or a combination).
+
+            2. Determine the maximum amount of data to be encoded within the bar code (for
+            example, number of ASCII characters, quantity of numbers, or quantity of 8-bit data
+            characters).
+
+            3. Determine the percentage of check digits that are used within the bar code. The higher
+            the percentage of check digits that are used, the more resistant the bar code is to
+            damage — however, the size of the bar code increases.
+
+            4. Use Table 10 with the information gathered from the questions above to select the mode
+            of the bar code.
+
+         MO - mode
+
+         DC - Number of Data Columns
+
+         DR - Number of Data Rows
+
+         EC - % of CWS for EC
+
+         MX - Max Alpha Characters
+
+         MD - Max Digits
+
+        MO DC DR EC  MX  MD
+         0  1 11 64   6   8
+         1  1 14 50  12  17
+         2  1 17 41  18  26
+         3  1 20 40  22  32
+         4  1 24 33  30  44
+         5  1 28 29  38  55
+         6  2  8 50  14  20
+         7  2 11 41  24  35
+         8  2 14 32  36  52
+         9  2 17 29  46  67
+        10  2 20 28  56  82
+        11  2 23 28  64  93
+        12  2 26 29  72 105
+        13  3  6 67  10  14
+        14  3  8 58  18  26
+        15  3 10 53  26  38
+        16  3 12 50  34  49
+        17  3 15 47  46  67
+        18  3 20 43  66  96
+        19  3 26 41  90 132
+        20  3 32 40 114 167
+        21  3 38 39 138 202
+        22  3 44 38 162 237
+        23  4  6 50  22  32
+        24  4  8 44  34  49
+        25  4 10 40  46  67
+        26  4 12 38  58  85
+        27  4 15 35  76 111
+        28  4 20 33 106 155
+        29  4 26 31 142 208
+        30  4 32 30 178 261
+        31  4 38 29 214 313
+        32  4 44 28 250 366
+        33  4  4 50  14  20
+    """
 
     def __init__(self, data, orientation=None, height=None, mode=None):
-        """
-        MicroPDF417 Bar Code (^BF)
-
-        :param data: data for barcode
-        :param orientation: 'N' - normal, 'R' - rotate 90, 'I' - inverted, 'B' - rotate 270
-        :param height: bar code height in dots (1 to 9999)
-        :param mode: 0-33
-
-        .. note::
-
-            To encode data into a MicroPDF417 bar code, complete these steps:
-
-                1. Determine the type of data to be encoded (for example, ASCII characters, numbers, 8-bit
-                data, or a combination).
-
-                2. Determine the maximum amount of data to be encoded within the bar code (for
-                example, number of ASCII characters, quantity of numbers, or quantity of 8-bit data
-                characters).
-
-                3. Determine the percentage of check digits that are used within the bar code. The higher
-                the percentage of check digits that are used, the more resistant the bar code is to
-                damage — however, the size of the bar code increases.
-
-                4. Use Table 10 with the information gathered from the questions above to select the mode
-                of the bar code.
-
-             MO - mode
-
-             DC - Number of Data Columns
-
-             DR - Number of Data Rows
-
-             EC - % of CWS for EC
-
-             MX - Max Alpha Characters
-
-             MD - Max Digits
-
-            MO DC DR EC  MX  MD
-             0  1 11 64   6   8
-             1  1 14 50  12  17
-             2  1 17 41  18  26
-             3  1 20 40  22  32
-             4  1 24 33  30  44
-             5  1 28 29  38  55
-             6  2  8 50  14  20
-             7  2 11 41  24  35
-             8  2 14 32  36  52
-             9  2 17 29  46  67
-            10  2 20 28  56  82
-            11  2 23 28  64  93
-            12  2 26 29  72 105
-            13  3  6 67  10  14
-            14  3  8 58  18  26
-            15  3 10 53  26  38
-            16  3 12 50  34  49
-            17  3 15 47  46  67
-            18  3 20 43  66  96
-            19  3 26 41  90 132
-            20  3 32 40 114 167
-            21  3 38 39 138 202
-            22  3 44 38 162 237
-            23  4  6 50  22  32
-            24  4  8 44  34  49
-            25  4 10 40  46  67
-            26  4 12 38  58  85
-            27  4 15 35  76 111
-            28  4 20 33 106 155
-            29  4 26 31 142 208
-            30  4 32 30 178 261
-            31  4 38 29 214 313
-            32  4 44 28 250 366
-            33  4  4 50  14  20
-        """
         super().__init__(data)
         self.zpl.append('^BF')
 
@@ -809,6 +807,16 @@ class MicroPDF417_Barcode(_PDF_Barcode):
 
 
 class Code93_Barcode(_1DBarcode):
+    """
+    Code 93 Bar Code (^BA)
+
+    :param data: data for barcode
+    :param orientation: 'N' - normal, 'R' - rotate 90, 'I' - inverted, 'B' - rotate 270
+    :param height: bar code height in dots (1 to 32000)
+    :param print_text: print text of data ('Y', 'N')
+    :param text_above: print text above barcode ('Y', 'N')
+    :param check_digit: print check digit ('Y', 'N')
+    """
 
     _ENC_MAP = {0: "'U", 1: '&A', 2: '&B', 3: '&C', 4: '&D',
                 5: '&E', 6: '&F', 7: '&G', 8: '&H', 9: '&I',
@@ -840,16 +848,6 @@ class Code93_Barcode(_1DBarcode):
     def __init__(self, data, orientation=None, height=None,
                  print_text=None, text_above=None, check_digit=None,
                  extended_ascii=False):
-        """
-        Code 93 Bar Code (^BA)
-
-        :param data: data for barcode
-        :param orientation: 'N' - normal, 'R' - rotate 90, 'I' - inverted, 'B' - rotate 270
-        :param height: bar code height in dots (1 to 32000)
-        :param print_text: print text of data ('Y', 'N')
-        :param text_above: print text above barcode ('Y', 'N')
-        :param check_digit: print check digit ('Y', 'N')
-        """
         self.extended_ascii = extended_ascii
         super().__init__('BA', data, orientation, None, height,
                          print_text, text_above, check_digit)
@@ -869,26 +867,26 @@ class Code93_Barcode(_1DBarcode):
 
 
 class CODABLOCK_Barcode(_Barcode):
+    """
+    CODABLOCK Bar Code (^BB)
+
+    :param data: data for barcode
+    :param orientation: * 'N' - normal
+                        * 'R' - rotate 90
+                        * 'I' - inverted
+                        * 'B' - rotate 270
+    :param height: height of individual dots (2 to 32000)
+    :param security_level: ('Y', 'N') only 'N' if mode is 'A'
+    :param characters_per_row: 2-62
+    :param row_count: mode A: 1-22, mode E,F: 2-4
+    :param mode: * 'A' - Code 39
+                 * 'F' - Code 128
+                 * 'E' - Code 128 with FNC1
+    """
 
     def __init__(self, data, orientation=None, height=None,
                  security_level=None, characters_per_row=None,
                  row_count=None, mode='F'):
-        """
-        CODABLOCK Bar Code (^BB)
-
-        :param data: data for barcode
-        :param orientation: * 'N' - normal
-                            * 'R' - rotate 90
-                            * 'I' - inverted
-                            * 'B' - rotate 270
-        :param height: height of individual dots (2 to 32000)
-        :param security_level: ('Y', 'N') only 'N' if mode is 'A'
-        :param characters_per_row: 2-62
-        :param row_count: mode A: 1-22, mode E,F: 2-4
-        :param mode: * 'A' - Code 39
-                     * 'F' - Code 128
-                     * 'E' - Code 128 with FNC1
-        """
         super().__init__(data)
         self.zpl.append('^BB')
 
@@ -936,6 +934,29 @@ class CODABLOCK_Barcode(_Barcode):
 
 
 class Code128_Barcode(_1DBarcode):
+    """
+    Code 128 Barcode (^BC)
+
+    Only Code B is currently implemented, in the printable ASCII subset
+    of ASCII > 95.
+
+    :param data: data for barcode
+    :param orientation: * 'N' - normal
+                        * 'R' - rotate 90
+                        * 'I' - inverted
+                        * 'B' - rotate 270
+    :param height: bar code height in dots (1 to 32000)
+    :param print_text: print text of data ('Y', 'N')
+    :param text_above: print text above barcode ('Y', 'N')
+    :param check_digit: Add Mod10 check digit to Mod103 ('Y', 'N')
+
+    .. todo::
+
+        * Add Invocation Character Handling
+        * Add Code A and C handling
+        * Add Code B > 94 handling
+        *
+    """
 
     _START_CODE_A = 103
     _START_CODE_B = 104
@@ -947,29 +968,6 @@ class Code128_Barcode(_1DBarcode):
 
     def __init__(self, data, orientation, height=None, print_text=None,
                  text_above=None, check_digit=None):
-        """
-        Code 128 Barcode (^BC)
-
-        Only Code B is currently implemented, in the printable ASCII subset
-        of ASCII > 95.
-
-        :param data: data for barcode
-        :param orientation: * 'N' - normal
-                            * 'R' - rotate 90
-                            * 'I' - inverted
-                            * 'B' - rotate 270
-        :param height: bar code height in dots (1 to 32000)
-        :param print_text: print text of data ('Y', 'N')
-        :param text_above: print text above barcode ('Y', 'N')
-        :param check_digit: Add Mod10 check digit to Mod103 ('Y', 'N')
-
-        .. todo::
-
-            * Add Invocation Character Handling
-            * Add Code A and C handling
-            * Add Code B > 94 handling
-            *
-        """
         super().__init__('BC', data, orientation, None, height, print_text, text_above, check_digit)
 
     def _validate_data(self):
@@ -992,26 +990,26 @@ class Code128_Barcode(_1DBarcode):
 
 
 class ANSICodabar_Barcode(_1DBarcode):
+    """
+    ANSI Codabar Bar Code (^BK)
+
+    Characters to encode (0-9)
+
+    :param data: barcode data numeric
+    :param orientation: * 'N' - normal
+                        * 'R' - rotate 90
+                        * 'I' - inverted
+                        * 'B' - rotate 270
+    :param height: bar code height in dots (1 to 32000)
+    :param print_text: print text of data ('Y', 'N')
+    :param text_above: print text above barcode ('Y', 'N')
+    :param start_character: 'A', 'B', 'C', 'D'
+    :param stop_character: 'A', 'B', 'C', 'D'
+    """
 
     def __init__(self, data, orientation=None, height=None,
                  print_text=None, text_above=None,
                  start_character=None, stop_character=None):
-        """
-        ANSI Codabar Bar Code (^BK)
-
-        Characters to encode (0-9)
-
-        :param data: barcode data numeric
-        :param orientation: * 'N' - normal
-                            * 'R' - rotate 90
-                            * 'I' - inverted
-                            * 'B' - rotate 270
-        :param height: bar code height in dots (1 to 32000)
-        :param print_text: print text of data ('Y', 'N')
-        :param text_above: print text above barcode ('Y', 'N')
-        :param start_character: 'A', 'B', 'C', 'D'
-        :param stop_character: 'A', 'B', 'C', 'D'
-        """
         super().__init__('BK', data, orientation, 'N', height, print_text, text_above)
 
         self.start_char = start_character
@@ -1036,19 +1034,19 @@ class ANSICodabar_Barcode(_1DBarcode):
 
 
 class EAN13_Barcode(_1DBarcode):
+    """
+    EAN-13 Bar Code (^BE)
+
+    Following Field data is limited to exactly 12 characters.
+
+    :param data: numeric data only and 12 numerals.  Truncated or padded to 12.
+    :param orientation: 'N' - normal, 'R' - rotate 90, 'I' - inverted, 'B' - rotate 270
+    :param height: bar code height in dots (1 to 32000)
+    :param print_text: print text of data ('Y', 'N')
+    :param text_above: print text above barcode ('Y', 'N')
+    """
 
     def __init__(self, data, orientation=None, height=None, print_text=None, text_above=None):
-        """
-        EAN-13 Bar Code (^BE)
-
-        Following Field data is limited to exactly 12 characters.
-
-        :param data: numeric data only and 12 numerals.  Truncated or padded to 12.
-        :param orientation: 'N' - normal, 'R' - rotate 90, 'I' - inverted, 'B' - rotate 270
-        :param height: bar code height in dots (1 to 32000)
-        :param print_text: print text of data ('Y', 'N')
-        :param text_above: print text above barcode ('Y', 'N')
-        """
         super().__init__('BE', data, orientation, None, height, print_text, text_above)
 
     def _verify_data(self):
@@ -1063,21 +1061,21 @@ class EAN13_Barcode(_1DBarcode):
 
 
 class LOGMARS_Barcode(_1DBarcode):
+    """
+    LOGMARS Bar Code (^BL)
+
+    This is a special application of Code 39 used by Department of Defense.
+    LOGMARS - Logistics Applications of Automated Marking and Reading Symbols
+
+    :param orientation: * 'N' - normal
+                        * 'R' - rotate 90
+                        * 'I' - inverted
+                        * 'B' - rotate 270
+    :param height: bar code height in dots (1 to 32000)
+    :param text_above: print text above barcode ('Y', 'N')
+    """
 
     def __init__(self, data, orientation=None, height=None, text_above=None):
-        """
-        LOGMARS Bar Code (^BL)
-
-        This is a special application of Code 39 used by Department of Defense.
-        LOGMARS - Logistics Applications of Automated Marking and Reading Symbols
-
-        :param orientation: * 'N' - normal
-                            * 'R' - rotate 90
-                            * 'I' - inverted
-                            * 'B' - rotate 270
-        :param height: bar code height in dots (1 to 32000)
-        :param text_above: print text above barcode ('Y', 'N')
-        """
         super().__init__('BJ', data, orientation, None, height)
 
         if text_above is None:
@@ -1089,26 +1087,26 @@ class LOGMARS_Barcode(_1DBarcode):
 
 
 class MSI_Barcode(_Barcode):
+    """
+    MSI Bar Code (^BM)
+
+    Characters to encode (0-9)
+
+    :param data: barcode data numeric only
+    :param orientation: 'N' - normal, 'R' - rotate 90, 'I' - inverted, 'B' - rotate 270
+    :param check_digit: A - no check digits
+                        B - 1 Mod 10
+                        C - 2 Mod 10
+                        D - 1 Mod 11 and 1 Mod 10
+    :param height: bar code height in dots (1 to 32000)
+    :param print_text: print text of data ('Y', 'N')
+    :param text_above: print text above barcode ('Y', 'N')
+    :param insert_check_digit: Add check digit to text line  ('Y', 'N')
+    """
 
     @_newline_after
     def add_barcode_msi(self, data, orientation=None, check_digit=None, height=None,
                         print_text=None, text_above=None, insert_check_digit=None):
-        """
-        MSI Bar Code (^BM)
-
-        Characters to encode (0-9)
-
-        :param data: barcode data numeric only
-        :param orientation: 'N' - normal, 'R' - rotate 90, 'I' - inverted, 'B' - rotate 270
-        :param check_digit: A - no check digits
-                            B - 1 Mod 10
-                            C - 2 Mod 10
-                            D - 1 Mod 11 and 1 Mod 10
-        :param height: bar code height in dots (1 to 32000)
-        :param print_text: print text of data ('Y', 'N')
-        :param text_above: print text above barcode ('Y', 'N')
-        :param insert_check_digit: Add check digit to text line  ('Y', 'N')
-        """
         self.zpl.append('^BM')
 
         if orientation is None:
@@ -1148,83 +1146,83 @@ class MSI_Barcode(_Barcode):
 
 
 class UPSMaxicode_Barcode(_Barcode):
+    """
+    UPS MaxiCode Bar Code
+
+    Note: Data adding isn't completed.  Must be done with manual add_data_field.
+
+    :param mode:
+        * 2 - structured carrier message: numeric postal code (U.S.)
+        * 3 - structured carrier message: alphanumeric postal code (non-U.S.)
+        * 4 - standard symbol, secretary
+        * 5 - full EEC
+        * 6 - reader program, secretary
+    :param symbol_number: 1-8
+    :param symbol_count: 1-8
+
+    .. note::
+
+    Considerations for ^FD when Using ^BD
+    The ^FD statement is divided into two parts: a high priority message (hpm) and a low priority
+    message (lpm). There are two types of high priority messages. One is for a U.S. Style Postal Code;
+    the other is for a non-U.S. Style Postal Code. The syntax for either of these high priority messages
+    must be exactly as shown or an error message is generated.
+    Format: ^FD <hpm><lpm>
+
+    <hpm> = high priority message (applicable only in Modes 2 and 3)
+        Values: 0 to 9, except where noted
+        U.S. Style Postal Code (Mode 2)
+            <hpm> = aaabbbcccccdddd
+            aaa = three-digit class of service
+            bbb = three-digit country zip code
+            ccccc = five-digit zip code
+            dddd = four-digit zip code extension (if none exists, four zeros (0000) must be
+            entered)
+        non-U.S. Style Postal Code (Mode 3)
+            <hpm> = aaabbbcccccc
+            aaa = three-digit class of service
+            bbb = three-digit country zip code
+            ccccc = six-digit zip code (A through Z or 0 to 9)
+
+    <lpm> = low priority message (only applicable in Modes 2 and 3)
+        GS is used to separate fields in a message (0x1D).
+        RS is used to separate format types (0x1E).
+        EOT is the end of transmission characters.
+
+        Message Header [)>RS
+        Transportation Data
+        Format Header01GS96
+        Tracking Number*<tracking number>
+        SCAC*GS<SCAC>
+        UPS Shipper NumberGS<shipper number>
+        Julian Day of PickupGS<day of pickup>
+        Shipment ID NumberGS<shipment ID number>
+        Package n/xGS<n/x>
+        Package WeightGS<weight>
+        Address ValidationGS<validation>
+        Ship to Street AddressGS<street address>
+        Ship to CityGS<city>
+        Ship to StateGS<state>
+        RSRS
+        End of MessageEOT
+        (* Mandatory Data for UPS)
+
+    Comments
+    • The formatting of <hpm> and <lpm> apply only when using Modes 2 and 3.
+    Mode 4, for example, takes whatever data is defined in the ^FD command and places it in the
+    symbol.
+    • UPS requires that certain data be present in a defined manner. When formatting MaxiCode data
+    for UPS, always use uppercase characters. When filling in the fields in the <lpm> for UPS,
+    follow the data size and types specified in Guide to Bar Coding with UPS.
+    • If you do not choose a mode, the default is Mode 2. If you use non-U.S. Postal Codes, you
+    probably get an error message (invalid character or message too short). When using non-U.S.
+    codes, use Mode 3.
+    • ZPL II doesn’t automatically change your mode based on the zip code format.
+    • When using special characters, such as GS, RS, or EOT, use the ^FH command to tell ZPL II to
+    use the hexadecimal value following the underscore character ( _ ).
+    """
 
     def __init__(self, mode=None, symbol_number=None, symbol_count=None):
-        """
-        UPS MaxiCode Bar Code
-
-        Note: Data adding isn't completed.  Must be done with manual add_data_field.
-
-        :param mode:
-            * 2 - structured carrier message: numeric postal code (U.S.)
-            * 3 - structured carrier message: alphanumeric postal code (non-U.S.)
-            * 4 - standard symbol, secretary
-            * 5 - full EEC
-            * 6 - reader program, secretary
-        :param symbol_number: 1-8
-        :param symbol_count: 1-8
-
-        .. note::
-
-        Considerations for ^FD when Using ^BD
-        The ^FD statement is divided into two parts: a high priority message (hpm) and a low priority
-        message (lpm). There are two types of high priority messages. One is for a U.S. Style Postal Code;
-        the other is for a non-U.S. Style Postal Code. The syntax for either of these high priority messages
-        must be exactly as shown or an error message is generated.
-        Format: ^FD <hpm><lpm>
-
-        <hpm> = high priority message (applicable only in Modes 2 and 3)
-            Values: 0 to 9, except where noted
-            U.S. Style Postal Code (Mode 2)
-                <hpm> = aaabbbcccccdddd
-                aaa = three-digit class of service
-                bbb = three-digit country zip code
-                ccccc = five-digit zip code
-                dddd = four-digit zip code extension (if none exists, four zeros (0000) must be
-                entered)
-            non-U.S. Style Postal Code (Mode 3)
-                <hpm> = aaabbbcccccc
-                aaa = three-digit class of service
-                bbb = three-digit country zip code
-                ccccc = six-digit zip code (A through Z or 0 to 9)
-
-        <lpm> = low priority message (only applicable in Modes 2 and 3)
-            GS is used to separate fields in a message (0x1D).
-            RS is used to separate format types (0x1E).
-            EOT is the end of transmission characters.
-
-            Message Header [)>RS
-            Transportation Data
-            Format Header01GS96
-            Tracking Number*<tracking number>
-            SCAC*GS<SCAC>
-            UPS Shipper NumberGS<shipper number>
-            Julian Day of PickupGS<day of pickup>
-            Shipment ID NumberGS<shipment ID number>
-            Package n/xGS<n/x>
-            Package WeightGS<weight>
-            Address ValidationGS<validation>
-            Ship to Street AddressGS<street address>
-            Ship to CityGS<city>
-            Ship to StateGS<state>
-            RSRS
-            End of MessageEOT
-            (* Mandatory Data for UPS)
-
-        Comments
-        • The formatting of <hpm> and <lpm> apply only when using Modes 2 and 3.
-        Mode 4, for example, takes whatever data is defined in the ^FD command and places it in the
-        symbol.
-        • UPS requires that certain data be present in a defined manner. When formatting MaxiCode data
-        for UPS, always use uppercase characters. When filling in the fields in the <lpm> for UPS,
-        follow the data size and types specified in Guide to Bar Coding with UPS.
-        • If you do not choose a mode, the default is Mode 2. If you use non-U.S. Postal Codes, you
-        probably get an error message (invalid character or message too short). When using non-U.S.
-        codes, use Mode 3.
-        • ZPL II doesn’t automatically change your mode based on the zip code format.
-        • When using special characters, such as GS, RS, or EOT, use the ^FH command to tell ZPL II to
-        use the hexadecimal value following the underscore character ( _ ).
-        """
         super().__init__('')
         self.zpl.append('^BD')
 
@@ -1246,99 +1244,99 @@ class UPSMaxicode_Barcode(_Barcode):
 
 
 class DataMatrix_Barcode(_Barcode):
+    """
+    Data Matrix Bar Code (^BX)
+
+    :param orientation: * 'N' - normal
+                        * 'R' - rotate 90
+                        * 'I' - inverted
+                        * 'B' - rotate 270
+    :param height: height of individual symbol elements 1-width of label
+    :param quality: amount of data added for error correction 0, 50, 80, 100, 140, 200
+    :param columns: * columns to encode 9-49
+                    * odd values only for quality 0-140
+                    * even values for quality 200
+    :param rows: rows to encode 9-49
+    :param format_id: * 1 = field data is numeric + space (0..9,”) – No \&
+                      * 2 = field data is uppercase alphanumeric + space (A..Z,’’) – No \&’’
+                      * 3 = field data is uppercase alphanumeric + space, period, comma, dash, and slash (
+                        0..9,A..Z,“.-/”)
+                      * 4 = field data is upper-case alphanumeric + space (0..9,A..Z,’’) – no \&’’
+                      * 5 = field data is full 128 ASCII 7-bit set
+                      * 6 = field data is full 256 ISO 8-bit set
+    :param escape_sequence: any character
+    :param aspect_ratio: * 1 = square
+                         * 2 = rectangular
+
+    .. note::
+
+    Effects of ^BY on ^BX
+
+        w = module width (no effect)
+
+        r = ratio (no effect)
+
+        h = height of symbol
+
+            If the dimensions of individual symbol elements are not specified in the ^BY command,
+            the height of symbol value is divided by the required rows/columns, rounded, limited to a
+            minimum value of one, and used as the dimensions of individual symbol elements.
+
+    Field Data (^FD) for ^BX
+
+        Quality 000 to 140
+
+            * The \& and || can be used to insert carriage returns, line feeds, and the backslash, similar to the
+              PDF417. Other characters in the control character range can be inserted only by using ^FH.
+              Field data is limited to 596 characters for quality 0 to 140. Excess field data causes no symbol to
+              print; if ^CV is active, INVALID-L prints. The field data must correspond to a user-specified
+              format ID or no symbol prints; if ^CV is active, INVALID-C prints.
+
+            * The maximum field sizes for quality 0 to 140 symbols are shown in the tktable in the g parameter.
+
+        Quality 200
+
+            * If more than 3072 bytes are supplied as field data, it is truncated to 3072 bytes. This limits the
+              maximum size of a numeric Data Matrix symbol to less than the 3116 numeric characters that
+              the specification would allow. The maximum alphanumeric capacity is 2335 and the maximum
+              8-bit byte capacity is 1556.
+
+            * If ^FH is used, field hexadecimal processing takes place before the escape sequence
+              processing described below.
+
+            * The underscore is the default escape sequence control character for quality 200 field data. A
+              different escape sequence control character can be selected by using parameter g in the ^BX
+              command.
+
+            The information that follows applies to firmware version: V60.13.0.12, V60.13.0.12Z, V60.13.0.12B,
+            V60.13.0.12ZB, or later. The input string escape sequences can be embedded in quality 200 field
+            data using the ASCII 95 underscore character ( _ ) or the character entered in parameter g:
+
+              * _X is the shift character for control characters (e.g., _@=NUL,_G=BEL,_0 is PAD)
+              * _1 to _3 for FNC characters 1 to 3 (explicit FNC4, upper shift, is not allowed)
+              * FNC2 (Structured Append) must be followed by nine digits, composed of three-digit numbers
+                with values between 1 and 254, that represent the symbol sequence and file identifier (for
+                example, symbol 3 of 7 with file ID 1001 is represented by _2214001001)
+              * 5NNN is code page NNN where NNN is a three-digit code page value (for example, Code Page
+                9 is represented by _5009)
+              * _dNNN creates ASCII decimal value NNN for a code word (must be three digits)
+              * _ in data is encoded by __ (two underscores)
+                The information that follows applies to all other versions of firmware. The input string escape
+                sequences can be embedded in quality 200 field data using the ASCII 7E tilde character (~) or the
+                character entered in parameter g:
+              * ~X is the shift character for control characters (e.g., ~@=NUL,~G=BEL,~0 is PAD)
+              * ~1 to ~3 for FNC characters 1 to 3 (explicit FNC4, upper shift, is not allowed)
+              * FNC2 (Structured Append) must be followed by nine digits, composed of three-digit numbers
+                with values between 1 and 254, that represent the symbol sequence and file identifier (for
+                example, symbol 3 of 7 with file ID 1001 is represented by ~2214001001)
+              * 5NNN is code page NNN where NNN is a three-digit code page value (for example, Code Page
+                9 is represented by ~5009)
+              * ~dNNN creates ASCII decimal value NNN for a code word (must be three digits)
+              * ~ in data is encoded by a ~ (tilde)
+    """
 
     def __init__(self, data, orientation=None, height=None, quality=None, columns=None,
                  rows=None, format_id=None, escape_sequence=None, aspect_ratio=None):
-        """
-        Data Matrix Bar Code (^BX)
-
-        :param orientation: * 'N' - normal
-                            * 'R' - rotate 90
-                            * 'I' - inverted
-                            * 'B' - rotate 270
-        :param height: height of individual symbol elements 1-width of label
-        :param quality: amount of data added for error correction 0, 50, 80, 100, 140, 200
-        :param columns: * columns to encode 9-49
-                        * odd values only for quality 0-140
-                        * even values for quality 200
-        :param rows: rows to encode 9-49
-        :param format_id: * 1 = field data is numeric + space (0..9,”) – No \&
-                          * 2 = field data is uppercase alphanumeric + space (A..Z,’’) – No \&’’
-                          * 3 = field data is uppercase alphanumeric + space, period, comma, dash, and slash (
-                            0..9,A..Z,“.-/”)
-                          * 4 = field data is upper-case alphanumeric + space (0..9,A..Z,’’) – no \&’’
-                          * 5 = field data is full 128 ASCII 7-bit set
-                          * 6 = field data is full 256 ISO 8-bit set
-        :param escape_sequence: any character
-        :param aspect_ratio: * 1 = square
-                             * 2 = rectangular
-
-        .. note::
-
-        Effects of ^BY on ^BX
-
-            w = module width (no effect)
-
-            r = ratio (no effect)
-
-            h = height of symbol
-
-                If the dimensions of individual symbol elements are not specified in the ^BY command,
-                the height of symbol value is divided by the required rows/columns, rounded, limited to a
-                minimum value of one, and used as the dimensions of individual symbol elements.
-
-        Field Data (^FD) for ^BX
-
-            Quality 000 to 140
-
-                * The \& and || can be used to insert carriage returns, line feeds, and the backslash, similar to the
-                  PDF417. Other characters in the control character range can be inserted only by using ^FH.
-                  Field data is limited to 596 characters for quality 0 to 140. Excess field data causes no symbol to
-                  print; if ^CV is active, INVALID-L prints. The field data must correspond to a user-specified
-                  format ID or no symbol prints; if ^CV is active, INVALID-C prints.
-
-                * The maximum field sizes for quality 0 to 140 symbols are shown in the tktable in the g parameter.
-
-            Quality 200
-
-                * If more than 3072 bytes are supplied as field data, it is truncated to 3072 bytes. This limits the
-                  maximum size of a numeric Data Matrix symbol to less than the 3116 numeric characters that
-                  the specification would allow. The maximum alphanumeric capacity is 2335 and the maximum
-                  8-bit byte capacity is 1556.
-
-                * If ^FH is used, field hexadecimal processing takes place before the escape sequence
-                  processing described below.
-
-                * The underscore is the default escape sequence control character for quality 200 field data. A
-                  different escape sequence control character can be selected by using parameter g in the ^BX
-                  command.
-
-                The information that follows applies to firmware version: V60.13.0.12, V60.13.0.12Z, V60.13.0.12B,
-                V60.13.0.12ZB, or later. The input string escape sequences can be embedded in quality 200 field
-                data using the ASCII 95 underscore character ( _ ) or the character entered in parameter g:
-
-                  * _X is the shift character for control characters (e.g., _@=NUL,_G=BEL,_0 is PAD)
-                  * _1 to _3 for FNC characters 1 to 3 (explicit FNC4, upper shift, is not allowed)
-                  * FNC2 (Structured Append) must be followed by nine digits, composed of three-digit numbers
-                    with values between 1 and 254, that represent the symbol sequence and file identifier (for
-                    example, symbol 3 of 7 with file ID 1001 is represented by _2214001001)
-                  * 5NNN is code page NNN where NNN is a three-digit code page value (for example, Code Page
-                    9 is represented by _5009)
-                  * _dNNN creates ASCII decimal value NNN for a code word (must be three digits)
-                  * _ in data is encoded by __ (two underscores)
-                    The information that follows applies to all other versions of firmware. The input string escape
-                    sequences can be embedded in quality 200 field data using the ASCII 7E tilde character (~) or the
-                    character entered in parameter g:
-                  * ~X is the shift character for control characters (e.g., ~@=NUL,~G=BEL,~0 is PAD)
-                  * ~1 to ~3 for FNC characters 1 to 3 (explicit FNC4, upper shift, is not allowed)
-                  * FNC2 (Structured Append) must be followed by nine digits, composed of three-digit numbers
-                    with values between 1 and 254, that represent the symbol sequence and file identifier (for
-                    example, symbol 3 of 7 with file ID 1001 is represented by ~2214001001)
-                  * 5NNN is code page NNN where NNN is a three-digit code page value (for example, Code Page
-                    9 is represented by ~5009)
-                  * ~dNNN creates ASCII decimal value NNN for a code word (must be three digits)
-                  * ~ in data is encoded by a ~ (tilde)
-        """
         super().__init__(data)
         self._initial_setup(orientation, height, quality, columns,
                            rows, format_id, escape_sequence, aspect_ratio)
@@ -1410,21 +1408,21 @@ class DataMatrix_Barcode(_Barcode):
 
 
 class Plessey_Barcode(_1DBarcode):
+    """
+    Plessey Bar Code (^BP)
+
+    Characters to encode (0-9 A-F)
+
+    :param data: data for barcode 0-9 or A-F
+    :param orientation: 'N' - normal, 'R' - rotate 90, 'I' - inverted, 'B' - rotate 270
+    :param check_digit: print check digit ('Y', 'N')
+    :param height: bar code height in dots (1 to 32000)
+    :param print_text: print text of data ('Y', 'N')
+    :param text_above: print text above barcode ('Y', 'N')
+    """
 
     def __init__(self, data, orientation=None, check_digit=None,
                  height=None, print_text=None, text_above=None):
-        """
-        Plessey Bar Code (^BP)
-
-        Characters to encode (0-9 A-F)
-
-        :param data: data for barcode 0-9 or A-F
-        :param orientation: 'N' - normal, 'R' - rotate 90, 'I' - inverted, 'B' - rotate 270
-        :param check_digit: print check digit ('Y', 'N')
-        :param height: bar code height in dots (1 to 32000)
-        :param print_text: print text of data ('Y', 'N')
-        :param text_above: print text above barcode ('Y', 'N')
-        """
         super().__init__('BP', data, orientation, check_digit, height, print_text, text_above)
 
     def _validate_data(self):
@@ -1433,54 +1431,54 @@ class Plessey_Barcode(_1DBarcode):
 
 
 class TLC39_Barcode(_BaseZPL):
+    """
+    TLC39 Bar Code (^BT)
+
+    :param orientation: * 'N' - normal
+                        * 'R' - rotate 90
+                        * 'I' - inverted
+                        * 'B' - rotate 270
+    :param code_39_width: width of the Code 39 bar code 1-10
+    :param code_39_ratio: wide to narrow bar width ratio of Code 39 bar code 2.0-3.0 by 0.1
+    :param code_39_height: height of the Code 39 bar code 1-9999
+    :param micropdf417_height: height of MicroPDF417 bar code 1-255
+    :param micropdf417_width: width of MicroPDF417 bar code 1-10
+
+    .. note::
+
+        ECI Number.
+
+            If the seventh character is not a comma, only Code 39 prints. This means if
+            more than 6 digits are present, Code 39 prints for the first six digits (and no Micro-PDF
+            symbol is printed).
+
+            * Must be 6 digits.
+            * Firmware generates invalid character error if the firmware sees anything but 6 digits.
+            * This number is not padded.
+
+        Serial number.
+
+            The serial number can contain up to 25 characters and is variable length.
+            The serial number is stored in the Micro-PDF symbol. If a comma follows the serial
+            number, then additional data is used below.
+
+            * If present, must be alphanumeric (letters and numbers, no punctuation).
+              This value is used if a comma follows the ECI number.
+
+        Additional data.
+
+            If present, it is used for things such as a country code.
+            Data cannot exceed 150 bytes. This includes serial number commas.
+
+            * Additional data is stored in the Micro-PDF symbol and appended after the
+              serial number. A comma must exist between each maximum of 25 characters
+              in the additional fields.
+            * Additional data fields can contain up to 25 alphanumeric characters per field.
+    """
 
     def __init__(self, orientation=None, code_39_width=None,
                  code_39_ratio=None, code_39_height=None,
                  micropdf417_height=None, micropdf417_width=None):
-        """
-        TLC39 Bar Code (^BT)
-
-        :param orientation: * 'N' - normal
-                            * 'R' - rotate 90
-                            * 'I' - inverted
-                            * 'B' - rotate 270
-        :param code_39_width: width of the Code 39 bar code 1-10
-        :param code_39_ratio: wide to narrow bar width ratio of Code 39 bar code 2.0-3.0 by 0.1
-        :param code_39_height: height of the Code 39 bar code 1-9999
-        :param micropdf417_height: height of MicroPDF417 bar code 1-255
-        :param micropdf417_width: width of MicroPDF417 bar code 1-10
-
-        .. note::
-
-            ECI Number.
-
-                If the seventh character is not a comma, only Code 39 prints. This means if
-                more than 6 digits are present, Code 39 prints for the first six digits (and no Micro-PDF
-                symbol is printed).
-
-                * Must be 6 digits.
-                * Firmware generates invalid character error if the firmware sees anything but 6 digits.
-                * This number is not padded.
-
-            Serial number.
-
-                The serial number can contain up to 25 characters and is variable length.
-                The serial number is stored in the Micro-PDF symbol. If a comma follows the serial
-                number, then additional data is used below.
-
-                * If present, must be alphanumeric (letters and numbers, no punctuation).
-                  This value is used if a comma follows the ECI number.
-
-            Additional data.
-
-                If present, it is used for things such as a country code.
-                Data cannot exceed 150 bytes. This includes serial number commas.
-
-                * Additional data is stored in the Micro-PDF symbol and appended after the
-                  serial number. A comma must exist between each maximum of 25 characters
-                  in the additional fields.
-                * Additional data fields can contain up to 25 alphanumeric characters per field.
-            """
         self._data_added = False
         super().__init__()
         self.zpl.append('^BT')
@@ -1558,152 +1556,152 @@ class TLC39_Barcode(_BaseZPL):
 
 
 class QR_Barcode(_Barcode):
+    """
+    QR Barcode (^BQ)
+
+    :param model: 1 - original, 2 - enhanced
+    :param magnification: 1 to 10
+    :param error_correction: 'H' - ultra-high, 'Q' - high', 'M' - standard, 'L' - low
+    :param mask_value: 0-7 defaults 7
+
+    .. note::
+
+        QR Switches (formatted into the ^FD field data)
+        There are 4 switch fields that are allowed, some with associated parameters and some without. Two
+        of these fields are always present, one is optional, and one’s presence depends on the value of
+        another. The switches are always placed in a fixed order. The four switches, in order are:
+
+        Mixed mode <D>iijjxx,Optional (note that this switch ends with a comma “,”)
+        Error correction level <H, Q, M, L>Mandatory
+        Data input <A, M>,Mandatory (note that this switch ends with a comma “,”)
+        Character Mode <N, A, Bdddd, K>Conditional (present if data input is M)
+
+        Mixed mode (Optional)
+            = D - allows mixing of different types of character modes in one code.
+            ii = code No. – a 2 digit number in the range 01 to 16
+            Value = subtracted from the Nth number of the divided code (must be two digits).
+            jj = No. of divisions – a 2 digit number in the range 02 to 16
+            Number of divisions (must be two digits).
+            xx = parity data – a 2 digit hexadecimal character in the range 00 to FF
+            Parity data value is obtained by calculating at the input data (the original input data before
+            divided byte-by-byte through the EX-OR operation).
+            , = the mixed mode switch, when present, is terminated with a comma
+
+        Error correction level (Required)
+            = H, Q, M, or L
+            H = ultra-high reliability level
+            Q = high reliability level
+            M = standard level (default)
+            L = high density level
+
+        Data input (Required)
+            = A or M followed by a comma
+            A = Automatic Input (default). Character Mode is not specified.
+            Data character string JIS8 unit, Shift JIS. When the input mode is Automatic Input, the binary codes
+            of 0x80 to 0x9F and 0xE0 to 0xFF cannot be set.
+            M = Manual Input. Character Mode must be specified.
+            Two types of data input mode exist: Automatic (A) and Manual (M). If A is specified, the
+            character mode does not need to be specified. If M is specified, the character mode must be
+            specified.
+            Character Mode (Required when data input = M)
+            = N, A, Bxxxx, or K
+            N = numeric: digits 0 – 9
+            A = alphanumeric: digits 0 – 9, upper case letters A – Z, space, and $%*+-./:) (45 characters)
+            Bxxxx = 8-bit byte mode. The ‘xxxx’ is the number of characters and must be exactly 4 decimal
+            digits.
+            This handles the 8-bit Latin/Kana character set in accordance with JIS X 0201 (character values
+            0x00 to 0xFF).
+            K = Kanji — handles only Kanji characters in accordance with the Shift JIS system based on JIS X
+            0208. This means that all parameters after the character mode K should be 16-bit characters. If
+            there are any 8-bit characters (such as ASCII code), an error occurs.
+            The data to be encoded follows immediately after the last switch.
+
+    Considerations for ^FD When Using the QR Code:
+
+        QR Switches (formatted into the ^FD field data)
+
+        mixed mode <D>
+            D = allows mixing of different types of character modes in one code.
+            code No. <01 16>
+            Value = subtracted from the Nth number of the divided code (must be two digits).
+
+        No. of divisions <02 16>
+            Number of divisions (must be two digits).
+
+        parity data <1 byte>
+            Parity data value is obtained by calculating at the input data (the original input data
+            before divided byte-by-byte through the EX-OR operation).
+
+        error correction level <H, Q, M, L>
+            H = ultra-high reliability level
+            Q = high reliability level
+            M = standard level (default)
+            L = high density level
+
+        character Mode <N, A, B, K>
+
+            N = numeric
+
+            A = alphanumeric
+
+            Bxxxx = 8-bit byte mode. This handles the 8-bit Latin/Kana character set in accordance
+            with JIS X 0201 (character values 0x00 to 0xFF).
+            xxxx = number of data characters is represented by two bytes of BCD code.
+
+            K = Kanji — handles only Kanji characters in accordance with the Shift JIS system based
+            on JIS X 0208. This means that all parameters after the character mode K should be 16-bit
+            characters. If there are any 8-bit characters (such as ASCII code), an error occurs.
+
+        data character string <Data>
+            Follows character mode or it is the last switch in the ^FD statement.
+
+        data input <A, M>
+            A = Automatic Input (default). Data character string JIS8 unit, Shift JIS. When the input
+            mode is Automatic Input, the binary codes of 0x80 to 0x9F and 0xE0 to 0xFF cannot be
+            set.
+            M = Manual Input
+            Two types of data input mode exist: Automatic (A) and Manual (M). If A is specified, the character
+            mode does not need to be specified. If M is specified, the character mode must be specified.
+
+    ^FD Field Data (Normal Mode)
+        Automatic Data Input (A) with Switches
+        ^FD
+        <error correction level>A,
+        <data character string>
+        ^FS
+
+    Manual Data Input (M) with Switches
+        ^FD
+        <error correction level>M,
+        <character mode><data character string>
+        ^FS
+
+    ^FD Field Data (Mixed Mode – requires more switches)
+        Automatic Data Input (A) with Switches
+        ^FD
+        <D><code No.> <No. of divisions> <parity data>,
+        <error correction level> A,
+        <data character string>,
+        <data character string>,
+        < : >,
+        <data character string n**>
+        ^FS
+
+    Manual Data Input (M) with Switches
+        ^FD
+        <code No.> <No. of divisions> <parity data>,
+        <error correction level> M,
+        <character mode 1> <data character string 1>,
+        <character mode 2> <data character string 2>,
+        < : > < : >,
+        <character mode n> <data character string n**>
+        ^FS
+
+        n** up to 200 in mixed mode
+    """
 
     def __init__(self, data, model=None, magnification=None, error_correction=None, mask_value=None):
         # TODO: FD data QR switches
-        """
-        QR Barcode (^BQ)
-
-        :param model: 1 - original, 2 - enhanced
-        :param magnification: 1 to 10
-        :param error_correction: 'H' - ultra-high, 'Q' - high', 'M' - standard, 'L' - low
-        :param mask_value: 0-7 defaults 7
-
-        .. note::
-
-            QR Switches (formatted into the ^FD field data)
-            There are 4 switch fields that are allowed, some with associated parameters and some without. Two
-            of these fields are always present, one is optional, and one’s presence depends on the value of
-            another. The switches are always placed in a fixed order. The four switches, in order are:
-
-            Mixed mode <D>iijjxx,Optional (note that this switch ends with a comma “,”)
-            Error correction level <H, Q, M, L>Mandatory
-            Data input <A, M>,Mandatory (note that this switch ends with a comma “,”)
-            Character Mode <N, A, Bdddd, K>Conditional (present if data input is M)
-
-            Mixed mode (Optional)
-                = D - allows mixing of different types of character modes in one code.
-                ii = code No. – a 2 digit number in the range 01 to 16
-                Value = subtracted from the Nth number of the divided code (must be two digits).
-                jj = No. of divisions – a 2 digit number in the range 02 to 16
-                Number of divisions (must be two digits).
-                xx = parity data – a 2 digit hexadecimal character in the range 00 to FF
-                Parity data value is obtained by calculating at the input data (the original input data before
-                divided byte-by-byte through the EX-OR operation).
-                , = the mixed mode switch, when present, is terminated with a comma
-
-            Error correction level (Required)
-                = H, Q, M, or L
-                H = ultra-high reliability level
-                Q = high reliability level
-                M = standard level (default)
-                L = high density level
-
-            Data input (Required)
-                = A or M followed by a comma
-                A = Automatic Input (default). Character Mode is not specified.
-                Data character string JIS8 unit, Shift JIS. When the input mode is Automatic Input, the binary codes
-                of 0x80 to 0x9F and 0xE0 to 0xFF cannot be set.
-                M = Manual Input. Character Mode must be specified.
-                Two types of data input mode exist: Automatic (A) and Manual (M). If A is specified, the
-                character mode does not need to be specified. If M is specified, the character mode must be
-                specified.
-                Character Mode (Required when data input = M)
-                = N, A, Bxxxx, or K
-                N = numeric: digits 0 – 9
-                A = alphanumeric: digits 0 – 9, upper case letters A – Z, space, and $%*+-./:) (45 characters)
-                Bxxxx = 8-bit byte mode. The ‘xxxx’ is the number of characters and must be exactly 4 decimal
-                digits.
-                This handles the 8-bit Latin/Kana character set in accordance with JIS X 0201 (character values
-                0x00 to 0xFF).
-                K = Kanji — handles only Kanji characters in accordance with the Shift JIS system based on JIS X
-                0208. This means that all parameters after the character mode K should be 16-bit characters. If
-                there are any 8-bit characters (such as ASCII code), an error occurs.
-                The data to be encoded follows immediately after the last switch.
-
-        Considerations for ^FD When Using the QR Code:
-
-            QR Switches (formatted into the ^FD field data)
-
-            mixed mode <D>
-                D = allows mixing of different types of character modes in one code.
-                code No. <01 16>
-                Value = subtracted from the Nth number of the divided code (must be two digits).
-
-            No. of divisions <02 16>
-                Number of divisions (must be two digits).
-
-            parity data <1 byte>
-                Parity data value is obtained by calculating at the input data (the original input data
-                before divided byte-by-byte through the EX-OR operation).
-
-            error correction level <H, Q, M, L>
-                H = ultra-high reliability level
-                Q = high reliability level
-                M = standard level (default)
-                L = high density level
-
-            character Mode <N, A, B, K>
-
-                N = numeric
-
-                A = alphanumeric
-
-                Bxxxx = 8-bit byte mode. This handles the 8-bit Latin/Kana character set in accordance
-                with JIS X 0201 (character values 0x00 to 0xFF).
-                xxxx = number of data characters is represented by two bytes of BCD code.
-
-                K = Kanji — handles only Kanji characters in accordance with the Shift JIS system based
-                on JIS X 0208. This means that all parameters after the character mode K should be 16-bit
-                characters. If there are any 8-bit characters (such as ASCII code), an error occurs.
-
-            data character string <Data>
-                Follows character mode or it is the last switch in the ^FD statement.
-
-            data input <A, M>
-                A = Automatic Input (default). Data character string JIS8 unit, Shift JIS. When the input
-                mode is Automatic Input, the binary codes of 0x80 to 0x9F and 0xE0 to 0xFF cannot be
-                set.
-                M = Manual Input
-                Two types of data input mode exist: Automatic (A) and Manual (M). If A is specified, the character
-                mode does not need to be specified. If M is specified, the character mode must be specified.
-
-        ^FD Field Data (Normal Mode)
-            Automatic Data Input (A) with Switches
-            ^FD
-            <error correction level>A,
-            <data character string>
-            ^FS
-
-        Manual Data Input (M) with Switches
-            ^FD
-            <error correction level>M,
-            <character mode><data character string>
-            ^FS
-
-        ^FD Field Data (Mixed Mode – requires more switches)
-            Automatic Data Input (A) with Switches
-            ^FD
-            <D><code No.> <No. of divisions> <parity data>,
-            <error correction level> A,
-            <data character string>,
-            <data character string>,
-            < : >,
-            <data character string n**>
-            ^FS
-
-        Manual Data Input (M) with Switches
-            ^FD
-            <code No.> <No. of divisions> <parity data>,
-            <error correction level> M,
-            <character mode 1> <data character string 1>,
-            <character mode 2> <data character string 2>,
-            < : > < : >,
-            <character mode n> <data character string n**>
-            ^FS
-
-            n** up to 200 in mixed mode
-        """
         super().__init__(data)
         self._initial_setup(model, magnification, error_correction, mask_value)
         self._add_data()
@@ -1729,26 +1727,26 @@ class QR_Barcode(_Barcode):
 
 
 class Postal_Barcode(_1DBarcode):
+    """
+    Postal Bar Code (^BZ)
+
+    Characters (0-9)
+
+    :param orientation: * 'N' - normal
+                        * 'R' - rotate 90
+                        * 'I' - inverted
+                        * 'B' - rotate 270
+    :param height: bar code height in dots (1 to 32000)
+    :param print_text: print text of data ('Y', 'N')
+    :param text_above: print text above barcode ('Y', 'N')
+    :param code_type: * 0 = Postnet bar code
+                      * 1 = Plant Bar Code
+                      * 2 = Reserved
+                      * 3 = USPS Intelligent Mail bar code
+    """
 
     def __init__(self, data, orientation=None, height=None, print_text=None,
                  text_above=None, code_type=None):
-        """
-        Postal Bar Code (^BZ)
-
-        Characters (0-9)
-
-        :param orientation: * 'N' - normal
-                            * 'R' - rotate 90
-                            * 'I' - inverted
-                            * 'B' - rotate 270
-        :param height: bar code height in dots (1 to 32000)
-        :param print_text: print text of data ('Y', 'N')
-        :param text_above: print text above barcode ('Y', 'N')
-        :param code_type: * 0 = Postnet bar code
-                          * 1 = Plant Bar Code
-                          * 2 = Reserved
-                          * 3 = USPS Intelligent Mail bar code
-        """
         super().__init__('BZ', data, orientation, None, height, print_text, text_above)
         if code_type is None:
             return
@@ -1759,33 +1757,33 @@ class Postal_Barcode(_1DBarcode):
 
 
 class GS1Databar_Barcode(_1DBarcode):
+    """
+    GS1 Databar Bar Code (^BR)
+
+    :param orientation: * 'N' - normal
+                        * 'R' - rotate 90
+                        * 'I' - inverted
+                        * 'B' - rotate 270
+    :param symbology_type: * 1 = GS1 DataBar Omnidirectional
+                           * 2 = GS1 DataBar Truncated
+                           * 3 = GS1 DataBar Stacked
+                           * 4 = GS1 DataBar Stacked Omnidirectional
+                           * 5 = GS1 DataBar Limited
+                           * 6 = GS1 DataBar Expanded
+                           * 7 = UPC-A
+                           * 8 = UPC-E
+                           * 9 = EAN-13
+                           * 10 = EAN-8
+                           * 11 = UCC/EAN-128 and CC-A/B
+                           * 12 = UCC/EAN-128 and CC-C
+    :param magnification: 1-10
+    :param separator_height: 1 or 2
+    :param height: bar code height 1-32000 dots
+    :param width: 2 - 22 (even numbers only)
+    """
 
     def __init__(self, data, orientation=None, symbology_type=None, magnification=None,
                  separator_height=None, height=None, width=None):
-        """
-        GS1 Databar Bar Code (^BR)
-
-        :param orientation: * 'N' - normal
-                            * 'R' - rotate 90
-                            * 'I' - inverted
-                            * 'B' - rotate 270
-        :param symbology_type: * 1 = GS1 DataBar Omnidirectional
-                               * 2 = GS1 DataBar Truncated
-                               * 3 = GS1 DataBar Stacked
-                               * 4 = GS1 DataBar Stacked Omnidirectional
-                               * 5 = GS1 DataBar Limited
-                               * 6 = GS1 DataBar Expanded
-                               * 7 = UPC-A
-                               * 8 = UPC-E
-                               * 9 = EAN-13
-                               * 10 = EAN-8
-                               * 11 = UCC/EAN-128 and CC-A/B
-                               * 12 = UCC/EAN-128 and CC-C
-        :param magnification: 1-10
-        :param separator_height: 1 or 2
-        :param height: bar code height 1-32000 dots
-        :param width: 2 - 22 (even numbers only)
-        """
         super().__init__(data)
         self.zpl.append('^BR')
 
@@ -1820,21 +1818,21 @@ class GS1Databar_Barcode(_1DBarcode):
 
 
 class UPC_A_Barcode(_1DBarcode):
+    """
+    UPC-A Bar Code (^BU)
+
+    :param data: barcode data
+    :param orientation: * 'N' - normal
+                        * 'R' - rotate 90
+                        * 'I' - inverted
+                        * 'B' - rotate 270
+    :param height: bar code height in dots (1 to 9999)
+    :param print_text: print text of data ('Y', 'N')
+    :param text_above: print text above barcode ('Y', 'N')
+    :param check_digit: print check digit ('Y', 'N')
+    """
 
     def __init__(self, data, orientation=None, height=None, print_text=None, text_above=None, check_digit=None):
-        """
-        UPC-A Bar Code (^BU)
-
-        :param data: barcode data
-        :param orientation: * 'N' - normal
-                            * 'R' - rotate 90
-                            * 'I' - inverted
-                            * 'B' - rotate 270
-        :param height: bar code height in dots (1 to 9999)
-        :param print_text: print text of data ('Y', 'N')
-        :param text_above: print text above barcode ('Y', 'N')
-        :param check_digit: print check digit ('Y', 'N')
-        """
         super().__init__('BU', data, orientation, None, height, print_text, text_above, check_digit)
 
     def _validate_data(self):
