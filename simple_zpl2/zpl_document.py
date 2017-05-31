@@ -1848,20 +1848,20 @@ class UPC_A_Barcode(_1DBarcode):
 
 
 class UPC_EAN_Extensions_Barcode(_1DBarcode):
+    """
+    UPC/EAN Extensions Bar Code (^BS)
+
+    :param data: barcode data
+    :param orientation: * 'N' - normal
+                        * 'R' - rotate 90
+                        * 'I' - inverted
+                        * 'B' - rotate 270
+    :param height: bar code height in dots (1 to 32000)
+    :param print_text: print text of data ('Y', 'N')
+    :param text_above: print text above barcode ('Y', 'N')
+    """
 
     def __init__(self, data, orientation=None, height=None, print_text=None, text_above=None):
-        """
-        UPC/EAN Extensions Bar Code (^BS)
-
-        :param data: barcode data
-        :param orientation: * 'N' - normal
-                            * 'R' - rotate 90
-                            * 'I' - inverted
-                            * 'B' - rotate 270
-        :param height: bar code height in dots (1 to 32000)
-        :param print_text: print text of data ('Y', 'N')
-        :param text_above: print text above barcode ('Y', 'N')
-        """
         super().__init__('BS', data, orientation, None, height, print_text, text_above)
 
     def _validate_data(self):
