@@ -335,7 +335,10 @@ class Industrial2of5_Barcode(_1DBarcode):
 
     Characters to encode (0-9)
 
-    :param orientation: 'N' - normal, 'R' - rotate 90, 'I' - inverted, 'B' - rotate 270
+    :param orientation: * 'N' - normal
+                        * 'R' - rotate 90
+                        * 'I' - inverted
+                        * 'B' - rotate 270
     :param height: bar code height in dots (1 to 32000)
     :param print_text: print text of data ('Y', 'N')
     :param text_above: print text above barcode ('Y', 'N')
@@ -356,7 +359,10 @@ class Standard2of5_Barcode(_1DBarcode):
     Characters to encode (0-9)
 
     :param data: barcode data numeric characters
-    :param orientation: 'N' - normal, 'R' - rotate 90, 'I' - inverted, 'B' - rotate 270
+    :param orientation: * 'N' - normal
+                        * 'R' - rotate 90
+                        * 'I' - inverted
+                        * 'B' - rotate 270
     :param height: bar code height in dots (1 to 32000)
     :param print_text: print text of data ('Y', 'N')
     :param text_above: print text above barcode ('Y', 'N')
@@ -438,7 +444,10 @@ class PlanetCode_Barcode(_1DBarcode):
     Planet Code Bar Code (^B5)
 
     :param data: data for barcode
-    :param orientation: 'N' - normal, 'R' - rotate 90, 'I' - inverted, 'B' - rotate 270
+    :param orientation: * 'N' - normal
+                        * 'R' - rotate 90
+                        * 'I' - inverted
+                        * 'B' - rotate 270
     :param height: bar code height in dots (1 to 9999)
     :param print_text: print text of data ('Y', 'N')
     :param text_above: print text above barcode ('Y', 'N')
@@ -457,7 +466,10 @@ class EAN8_Barcode(_1DBarcode):
     EAN 8 Bar Code (^B8)
 
     :param data: data for barcode
-    :param orientation: 'N' - normal, 'R' - rotate 90, 'I' - inverted, 'B' - rotate 270
+    :param orientation: * 'N' - normal
+                        * 'R' - rotate 90
+                        * 'I' - inverted
+                        * 'B' - rotate 270
     :param height: bar code height in dots (1 to 32000)
     :param print_text: print text of data ('Y', 'N')
     :param text_above: print text above barcode ('Y', 'N')
@@ -475,7 +487,10 @@ class UPC_Barcode(_1DBarcode):
     UPC-E Bar Code (^B9)
 
     :param data: data for barcode
-    :param orientation: 'N' - normal, 'R' - rotate 90, 'I' - inverted, 'B' - rotate 270
+    :param orientation: * 'N' - normal
+                        * 'R' - rotate 90
+                        * 'I' - inverted
+                        * 'B' - rotate 270
     :param height: bar code height in dots (1 to 32000)
     :param print_text: print text of data ('Y', 'N')
     :param text_above: print text above barcode ('Y', 'N')
@@ -740,7 +755,7 @@ class MicroPDF417_Barcode(_PDF_Barcode):
             the percentage of check digits that are used, the more resistant the bar code is to
             damage — however, the size of the bar code increases.
 
-            4. Use Table 10 with the information gathered from the questions above to select the mode
+            4. Use Table with the information gathered from the questions above to select the mode
             of the bar code.
 
          MO - mode
@@ -850,7 +865,10 @@ class Code93_Barcode(_1DBarcode):
     Code 93 Bar Code (^BA)
 
     :param data: data for barcode
-    :param orientation: 'N' - normal, 'R' - rotate 90, 'I' - inverted, 'B' - rotate 270
+    :param orientation: * 'N' - normal
+                        * 'R' - rotate 90
+                        * 'I' - inverted
+                        * 'B' - rotate 270
     :param height: bar code height in dots (1 to 32000)
     :param print_text: print text of data ('Y', 'N')
     :param text_above: print text above barcode ('Y', 'N')
@@ -1079,7 +1097,10 @@ class EAN13_Barcode(_1DBarcode):
     Following Field data is limited to exactly 12 characters.
 
     :param data: numeric data only and 12 numerals.  Truncated or padded to 12.
-    :param orientation: 'N' - normal, 'R' - rotate 90, 'I' - inverted, 'B' - rotate 270
+    :param orientation: * 'N' - normal
+                        * 'R' - rotate 90
+                        * 'I' - inverted
+                        * 'B' - rotate 270
     :param height: bar code height in dots (1 to 32000)
     :param print_text: print text of data ('Y', 'N')
     :param text_above: print text above barcode ('Y', 'N')
@@ -1456,7 +1477,10 @@ class Plessey_Barcode(_1DBarcode):
     Characters to encode (0-9 A-F)
 
     :param data: data for barcode 0-9 or A-F
-    :param orientation: 'N' - normal, 'R' - rotate 90, 'I' - inverted, 'B' - rotate 270
+    :param orientation: * 'N' - normal
+                        * 'R' - rotate 90
+                        * 'I' - inverted
+                        * 'B' - rotate 270
     :param check_digit: print check digit ('Y', 'N')
     :param height: bar code height in dots (1 to 32000)
     :param print_text: print text of data ('Y', 'N')
@@ -1603,7 +1627,10 @@ class QR_Barcode(_Barcode):
 
     :param model: 1 - original, 2 - enhanced
     :param magnification: 1 to 10
-    :param error_correction: 'H' - ultra-high, 'Q' - high', 'M' - standard, 'L' - low
+    :param error_correction: * 'H' - ultra-high
+                             * 'Q' - high'
+                             * 'M' - standard
+                             * 'L' - low
     :param mask_value: 0-7 defaults 7
 
     .. note::
@@ -1619,6 +1646,7 @@ class QR_Barcode(_Barcode):
         Character Mode <N, A, Bdddd, K>Conditional (present if data input is M)
 
         Mixed mode (Optional)
+
             = D - allows mixing of different types of character modes in one code.
             ii = code No. – a 2 digit number in the range 01 to 16
             Value = subtracted from the Nth number of the divided code (must be two digits).
@@ -1631,32 +1659,36 @@ class QR_Barcode(_Barcode):
 
         Error correction level (Required)
             = H, Q, M, or L
-            H = ultra-high reliability level
-            Q = high reliability level
-            M = standard level (default)
-            L = high density level
+
+            * H = ultra-high reliability level
+            * Q = high reliability level
+            * M = standard level (default)
+            * L = high density level
 
         Data input (Required)
             = A or M followed by a comma
-            A = Automatic Input (default). Character Mode is not specified.
-            Data character string JIS8 unit, Shift JIS. When the input mode is Automatic Input, the binary codes
-            of 0x80 to 0x9F and 0xE0 to 0xFF cannot be set.
-            M = Manual Input. Character Mode must be specified.
-            Two types of data input mode exist: Automatic (A) and Manual (M). If A is specified, the
-            character mode does not need to be specified. If M is specified, the character mode must be
-            specified.
-            Character Mode (Required when data input = M)
+
+            * A = Automatic Input (default). Character Mode is not specified.
+              Data character string JIS8 unit, Shift JIS. When the input mode is Automatic Input, the binary codes
+              of 0x80 to 0x9F and 0xE0 to 0xFF cannot be set.
+            * M = Manual Input. Character Mode must be specified.
+              Two types of data input mode exist: Automatic (A) and Manual (M). If A is specified, the
+              character mode does not need to be specified. If M is specified, the character mode must be
+              specified.
+
+        Character Mode (Required when data input = M)
             = N, A, Bxxxx, or K
-            N = numeric: digits 0 – 9
-            A = alphanumeric: digits 0 – 9, upper case letters A – Z, space, and $%*+-./:) (45 characters)
-            Bxxxx = 8-bit byte mode. The ‘xxxx’ is the number of characters and must be exactly 4 decimal
-            digits.
-            This handles the 8-bit Latin/Kana character set in accordance with JIS X 0201 (character values
-            0x00 to 0xFF).
-            K = Kanji — handles only Kanji characters in accordance with the Shift JIS system based on JIS X
-            0208. This means that all parameters after the character mode K should be 16-bit characters. If
-            there are any 8-bit characters (such as ASCII code), an error occurs.
-            The data to be encoded follows immediately after the last switch.
+
+            * N = numeric: digits 0 – 9
+            * A = alphanumeric: digits 0 – 9, upper case letters A – Z, space, and $%*+-./:) (45 characters)
+            * Bxxxx = 8-bit byte mode. The ‘xxxx’ is the number of characters and must be exactly 4 decimal
+              digits.
+              This handles the 8-bit Latin/Kana character set in accordance with JIS X 0201 (character values
+              0x00 to 0xFF).
+            * K = Kanji — handles only Kanji characters in accordance with the Shift JIS system based on JIS X
+              0208. This means that all parameters after the character mode K should be 16-bit characters. If
+              there are any 8-bit characters (such as ASCII code), an error occurs.
+              The data to be encoded follows immediately after the last switch.
 
     Considerations for ^FD When Using the QR Code:
 
@@ -1675,35 +1707,31 @@ class QR_Barcode(_Barcode):
             before divided byte-by-byte through the EX-OR operation).
 
         error correction level <H, Q, M, L>
-            H = ultra-high reliability level
-            Q = high reliability level
-            M = standard level (default)
-            L = high density level
+            * H = ultra-high reliability level
+            * Q = high reliability level
+            * M = standard level (default)
+            * L = high density level
 
         character Mode <N, A, B, K>
-
-            N = numeric
-
-            A = alphanumeric
-
-            Bxxxx = 8-bit byte mode. This handles the 8-bit Latin/Kana character set in accordance
-            with JIS X 0201 (character values 0x00 to 0xFF).
-            xxxx = number of data characters is represented by two bytes of BCD code.
-
-            K = Kanji — handles only Kanji characters in accordance with the Shift JIS system based
-            on JIS X 0208. This means that all parameters after the character mode K should be 16-bit
-            characters. If there are any 8-bit characters (such as ASCII code), an error occurs.
+            * N = numeric
+            * A = alphanumeric
+            * Bxxxx = 8-bit byte mode. This handles the 8-bit Latin/Kana character set in accordance
+              with JIS X 0201 (character values 0x00 to 0xFF).
+              xxxx = number of data characters is represented by two bytes of BCD code.
+            * K = Kanji — handles only Kanji characters in accordance with the Shift JIS system based
+              on JIS X 0208. This means that all parameters after the character mode K should be 16-bit
+              characters. If there are any 8-bit characters (such as ASCII code), an error occurs.
 
         data character string <Data>
             Follows character mode or it is the last switch in the ^FD statement.
 
         data input <A, M>
-            A = Automatic Input (default). Data character string JIS8 unit, Shift JIS. When the input
-            mode is Automatic Input, the binary codes of 0x80 to 0x9F and 0xE0 to 0xFF cannot be
-            set.
-            M = Manual Input
-            Two types of data input mode exist: Automatic (A) and Manual (M). If A is specified, the character
-            mode does not need to be specified. If M is specified, the character mode must be specified.
+            * A = Automatic Input (default). Data character string JIS8 unit, Shift JIS. When the input
+              mode is Automatic Input, the binary codes of 0x80 to 0x9F and 0xE0 to 0xFF cannot be
+              set.
+            * M = Manual Input
+              Two types of data input mode exist: Automatic (A) and Manual (M). If A is specified, the character
+              mode does not need to be specified. If M is specified, the character mode must be specified.
 
     ^FD Field Data (Normal Mode)
         Automatic Data Input (A) with Switches
