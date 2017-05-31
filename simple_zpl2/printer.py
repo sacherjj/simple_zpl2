@@ -13,14 +13,14 @@ class NetworkPrinter(object):
         self.ip = ip_address
         self.port = port
 
-    def print_zpl(self, label_formatter, timeout=10):
+    def print_zpl(self, zpl_document, timeout=10):
         """
         Send ZPL2 formatted text to a network label printer
 
-        :param label_formatter: Formatter object, fully build for label.
+        :param zpl_document: Document object, fully build for label.
         :param timeout: Socket timeout for printer connection, default 10.
         """
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.settimeout(timeout)
             s.connect((self.ip, self.port))
-            s.send(label_formatter.zpl_data)
+            s.send(zpl_document.zpl_data)

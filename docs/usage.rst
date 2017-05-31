@@ -2,20 +2,27 @@
 Usage
 =====
 
+No effort has been made for backwards compatibility with Python 2.  I don't see the effort worth it for a new library.
+
+Simple ZPL2 has a main object, the `ZPLDocument`.  This is used to build on the linear ZPL2 data.
+For simpler fields, using the `.add_*` methods.  Larger barcode objects group these fields together for ease and data
+validation.  These are added to the ZPLDocument via `.add_barcode` method.
+
 To use Simple ZPL2 in a project::
 
-    from simple_zpl2 import Formatter
+    from simple_zpl2 import ZPLDocument
 
-    # Each label is built with a Formatter object
-    # The below code would generally be built into a method to create the object or both create and print.
-    zpl = Formatter()
-    zpl.add_field_origin(20, 20)
-    zpl.add_barcode_qr(1, 2, zpl.QR_ERROR_CORRECTION_STANDARD)
-    zpl.add_field_data('This is data inside a QR code.  This is a barcode often read by cell phones.')
+    # Each label is built with a ZPLDocument object
+    zdoc = ZPLDocument()
+    zdoc.add_comment("Barcode and text")
+    zdoc.add_field_origin(20, 20)
+    code128_data = 'TEST BARCODE'
+    bc = Code128_Barcode(code128_data, 'N', 30, 'Y')
+    zdoc.add_barcode(bc)
 
 You can view the zpl encoded text::
 
-    print(zpl.zpl_text)
+    print(zdoc.zpl_text)
 
 Using a web service to render the label as PNG::
 
@@ -23,7 +30,7 @@ Using a web service to render the label as PNG::
     import io
 
     # Get PNG byte array
-    png = zpl.render_png(label_width=2, label_height=1)
+    png = zdoc.render_png(label_width=2, label_height=1)
     # render fake file from bytes
     fake_file = io.BytesIO(png)
     img = Image.open(fake_file)
@@ -35,5 +42,12 @@ Print label to network based label printer::
     from simple_zpl2 import NetworkPrinter
 
     prn = NetworkPrinter('192.168.40.1')
-    prn.print_zpl(zpl)
+    prn.print_zpl(zdoc)
 
+
+Note: str vs bytes
+------------------
+
+There may currently be issues with using str instead of bytes for some portions of data.  I make the assumption
+that the strings are in UTF-8 format.  Please file issues if you run into data errors due to this.  I will be converting
+this to require bytes and add some helper methods for str input.
