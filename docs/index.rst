@@ -10,6 +10,7 @@ Contents:
    installation
    usage
    api/index
+   not_implemented
    contributing
    authors
    history
