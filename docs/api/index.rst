@@ -6,4 +6,9 @@ API Documentation
     :maxdepth: 2
     :glob:
 
-    simple_zpl2*
+    simple_zpl2.*
+
+.. automodule:: simple_zpl2
+    :members:
+    :undoc-members:
+    :show-inheritance:
