@@ -133,6 +133,8 @@ class _BaseZPL(object):
 
     @staticmethod
     def _verify_data_numeric(data):
+        if isinstance(data, int):
+            return True
         if not data.isdigit():
             raise ValueError('Data must contain only digits.')
 
@@ -1812,10 +1814,12 @@ class Postal_Barcode(_1DBarcode):
         self._verify_data_numeric(self.data)
 
 
-class GS1Databar_Barcode(_1DBarcode):
+class GS1Databar_Barcode(_Barcode):
     """
     GS1 Databar Bar Code (^BR)
 
+    :param gtin_data: GTIN-12 or GTIN13 data
+    :param composite_data: optional additional data
     :param orientation: * 'N' - normal
                         * 'R' - rotate 90
                         * 'I' - inverted
@@ -1834,43 +1838,38 @@ class GS1Databar_Barcode(_1DBarcode):
                            * 12 = UCC/EAN-128 and CC-C
     :param magnification: 1-10
     :param separator_height: 1 or 2
-    :param height: bar code height 1-32000 dots
-    :param width: 2 - 22 (even numbers only)
+    :param bar_height: bar code height 1-32000 dots
+    :param segment_width: 2 - 22 (even numbers only)
     """
 
-    def __init__(self, data, orientation=None, symbology_type=None, magnification=None,
-                 separator_height=None, height=None, width=None):
+    def __init__(self, gtin_data, composite_data=None, orientation='R',
+                 symbology_type=1, magnification=3,
+                 separator_height=1, bar_height=25, segment_width=22):
+        # TODO: Find out more about GTIN-12/GTIN-13 and validate data
+        data = str(gtin_data)
+        if composite_data:
+            data += '|' + composite_data
         super().__init__(data)
+        self._initial_build(orientation, symbology_type, magnification,
+                            separator_height, bar_height, segment_width)
+        self._add_field_data(data)
+
+    @_newline_after
+    def _initial_build(self, orientation, symbology_type, magnification,
+                       separator_height, bar_height, segment_width):
         self.zpl.append('^BR')
 
-        if orientation is None:
-            return
         self._add_orientation(orientation, False)
-
-        if symbology_type is None:
-            return
         self._add_int_value_in_range(symbology_type, 'symbology_type', 1, 12, True)
-
-        if magnification is None:
-            return
         self._add_int_value_in_range(magnification, 'magnification', 1, 10, True)
-
-        if separator_height is None:
-            return
         self._add_value_in_list(separator_height, 'separator_height', (1, 2), True)
-
-        if height is None:
-            return
-        self._add_int_value_in_range(height, 'height', 1, 32000, True)
-
-        if width is None:
-            return
+        self._add_int_value_in_range(bar_height, 'height', 1, 32000, True)
         # width is only available on GS1 DataBar Expanded (6)
         if symbology_type != 6:
             return
-        if width % 2 == 1:
+        if segment_width % 2 == 1:
             raise ValueError('width must be even.')
-        self._add_int_value_in_range(width, 'width', 2, 22, True)
+        self._add_int_value_in_range(segment_width, 'width', 2, 22, True)
 
 
 class UPC_A_Barcode(_1DBarcode):
@@ -1888,13 +1887,20 @@ class UPC_A_Barcode(_1DBarcode):
     :param check_digit: print check digit ('Y', 'N')
     """
 
-    def __init__(self, data, orientation=None, height=None, print_text=None, text_above=None, check_digit=None):
+    def __init__(self, data, orientation, height, print_text='Y',
+                 text_above='N', check_digit='Y'):
         super().__init__('BU', data, orientation, None, height, print_text, text_above, check_digit)
+        # Default height max is 32000
+        if height > 9999:
+            raise ValueError('height must be between 1 and 9999 (inclusive)')
 
     def _validate_data(self):
         self._verify_data_numeric(self.data)
+        if str(self.data).replace('0', '') == '':
+            raise ValueError('UPC data cannot be zero.')
 
     def _process_data(self):
+        self.data = str(self.data)
         if len(self.data) < 11:
             self.data = self.data.zfill(11)  # zero pad if needed for 11
         if len(self.data) > 11:
@@ -1915,10 +1921,11 @@ class UPC_EAN_Extensions_Barcode(_1DBarcode):
     :param text_above: print text above barcode ('Y', 'N')
     """
 
-    def __init__(self, data, orientation=None, height=None, print_text=None, text_above=None):
+    def __init__(self, data, orientation='N', height=100, print_text='Y', text_above='Y'):
         super().__init__('BS', data, orientation, None, height, print_text, text_above)
 
     def _validate_data(self):
+        self.data = str(self.data)
         if len(self.data) not in (2, 5):
             raise ValueError('UPC/EAN Extension barcode is limited to 2 or 5 digits only.')
         self._verify_data_numeric(self.data)
