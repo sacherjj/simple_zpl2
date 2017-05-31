@@ -28,7 +28,7 @@ def test_field_block():
     assert(zdoc.zpl_bytes == b'^XA\n^FB222,1,9999,R,9999\n^XZ')
 
 
-def test_fiedl_block_error():
+def test_field_block_error():
     for width in (-1, 'A', '', None):
         with pytest.raises(Exception):
             zdoc = ZPLDocument()
