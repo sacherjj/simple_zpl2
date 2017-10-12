@@ -19,7 +19,7 @@ test_requirements = [
 
 setup(
     name='simple_zpl2',
-    version='0.2.1',
+    version='0.2.2',
     description="For building ZPL2 strings for printing barcodes with Zebra or compatible label printers.",
     long_description=readme + '\n\n' + history,
     author="Joe Sacher",
