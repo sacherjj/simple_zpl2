@@ -23,4 +23,4 @@ class NetworkPrinter(object):
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.settimeout(timeout)
             s.connect((self.ip, self.port))
-            s.send(zpl_document.zpl_data)
+            s.send(zpl_document.zpl_bytes)

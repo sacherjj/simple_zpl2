@@ -2287,7 +2287,7 @@ class ZPLDocument(_BaseZPL):
 
         :return: byte array
         """
-        return bytes(self.zpl_text, 'utf-8')
+        return bytes(self.zpl_text, 'UTF-8')
 
     def render_png(self, label_width, label_height,
                    dpmm=8, index=0):
