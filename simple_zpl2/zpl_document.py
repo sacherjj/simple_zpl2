@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from functools import wraps
 import requests
+import math
+import PIL.ImageOps
 
 
 def _newline_after(func):
@@ -2234,6 +2236,7 @@ class ZPLDocument(_BaseZPL):
         self._add_int_value_in_range(border, 'border', 1, 32000, True, False)
         self._add_line_color(line_color, True)
         self._add_int_value_in_range(corner_rounding, 'corner_rounding', 0, 8, True, False)
+        self.zpl.append('^FS')
 
     @_newline_after
     def add_graphic_circle(self, diameter=3, border=1, color='B'):
@@ -2249,6 +2252,46 @@ class ZPLDocument(_BaseZPL):
         self._add_int_value_in_range(diameter, 'diameter', 3, 4095, False, True)
         self._add_int_value_in_range(border, 'border', 1, 4095, True, True)
         self._add_line_color(color, True)
+
+    def _convert_image(self, image, width, height, dpmm, compression_type='A'):
+        '''
+        converts *image* (of type PIL.Image) to a ZPL2 format
+        compression_type can be one of ['A', 'B', 'C']
+        returns data
+        '''
+        image = image.resize((int(width*dpmm), int(height*dpmm)))
+        image = image.convert('L').convert('1')
+
+        return image.tobytes().hex().upper()
+
+    @_newline_after
+    def add_graphic_field(self, image, width, height=0, compression_type='A'):
+        """
+        Produce Graphic Field on Label (^GF)
+
+        :param image: image
+        :param width: border to 99999
+        :param height: border to 99999
+        :param compression_type: * 'A' - ASCII hexadecimal
+                                 * 'B' - binary
+                                 * 'C' - compressed binary
+        """
+        if not height:
+            height = int(float(image.size[1])/image.size[0]*width)
+
+        dpmm = 12.0
+        totalbytes = math.ceil(width*dpmm/8.0)*height*dpmm
+        bytesperrow = math.ceil(width*dpmm/8.0)
+
+        data = self._convert_image(image, width, height, dpmm, compression_type=compression_type)
+
+        self.zpl.append('^GF')
+        self.add_zpl_raw(compression_type)
+        self._add_int_value_in_range(len(data), 'len data', 1, 99999, True, False)
+        self._add_int_value_in_range(int(totalbytes), 'width', 1, 99999, True, False)
+        self._add_int_value_in_range(bytesperrow, 'height', 1, 99999, True, False)
+        self._add_comma(True)
+        self.add_zpl_raw(data)
 
     @_newline_after
     def add_printer_sleep(self, sleep_seconds, shutdown_while_queued):
