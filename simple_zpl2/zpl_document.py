@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
-from functools import wraps
-import requests
 import math
+import requests
+from functools import wraps
+
 import PIL.ImageOps
+
+from simple_zpl2.utils import convert_pil_image
 
 
 def _newline_after(func):
@@ -2253,25 +2256,17 @@ class ZPLDocument(_BaseZPL):
         self._add_int_value_in_range(border, 'border', 1, 4095, True, True)
         self._add_line_color(color, True)
 
-    def _convert_image(self, image, width, height, dpmm, compression_type='A'):
-        '''
-        converts *image* (of type PIL.Image) to a ZPL2 format
-        compression_type can be one of ['A', 'B', 'C']
-        returns data
-        '''
-        image = image.resize((int(width*dpmm), int(height*dpmm)))
-        image = image.convert('L').convert('1')
-
-        return image.tobytes().hex().upper()
-
     @_newline_after
-    def add_graphic_field(self, image, width, height=0, compression_type='A'):
+    def add_graphic_field(self, image, width, height=0, dpmm=8, compression_type='A'):
         """
         Produce Graphic Field on Label (^GF)
 
-        :param image: image
+        :param image: PIL image
         :param width: border to 99999
         :param height: border to 99999
+        :param dpmm: * 8  = 200dpi
+                     * 12 = 300dpi
+                     * 24 = 600dpi
         :param compression_type: * 'A' - ASCII hexadecimal
                                  * 'B' - binary
                                  * 'C' - compressed binary
@@ -2279,11 +2274,10 @@ class ZPLDocument(_BaseZPL):
         if not height:
             height = int(float(image.size[1])/image.size[0]*width)
 
-        dpmm = 12.0
-        totalbytes = math.ceil(width*dpmm/8.0)*height*dpmm
+        totalbytes = math.ceil(width*dpmm*height*dpmm/8.0)
         bytesperrow = math.ceil(width*dpmm/8.0)
 
-        data = self._convert_image(image, width, height, dpmm, compression_type=compression_type)
+        data = convert_pil_image(image, width, height, dpmm, compression_type=compression_type)
 
         self.zpl.append('^GF')
         self.add_zpl_raw(compression_type)
