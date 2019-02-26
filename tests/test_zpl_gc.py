@@ -5,15 +5,15 @@ from simple_zpl2 import ZPLDocument
 def test_graphic_circle():
     zdoc = ZPLDocument()
     zdoc.add_graphic_circle(3999)
-    assert(zdoc.zpl_bytes == b'^XA\n^GC3999,1,B\n^XZ')
+    assert(zdoc.zpl_bytes == b'^XA\n^GC3999,1,B^FS\n^XZ')
 
     zdoc = ZPLDocument()
     zdoc.add_graphic_circle(3999, 234)
-    assert(zdoc.zpl_bytes == b'^XA\n^GC3999,234,B\n^XZ')
+    assert(zdoc.zpl_bytes == b'^XA\n^GC3999,234,B^FS\n^XZ')
 
     zdoc = ZPLDocument()
     zdoc.add_graphic_circle(3999, 234, 'W')
-    assert(zdoc.zpl_bytes == b'^XA\n^GC3999,234,W\n^XZ')
+    assert(zdoc.zpl_bytes == b'^XA\n^GC3999,234,W^FS\n^XZ')
 
 
 def test_graphic_circle_errors():

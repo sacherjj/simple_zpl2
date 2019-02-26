@@ -3,8 +3,6 @@ import math
 import requests
 from functools import wraps
 
-import PIL.ImageOps
-
 from simple_zpl2.utils import convert_pil_image
 
 
@@ -2255,6 +2253,7 @@ class ZPLDocument(_BaseZPL):
         self._add_int_value_in_range(diameter, 'diameter', 3, 4095, False, True)
         self._add_int_value_in_range(border, 'border', 1, 4095, True, True)
         self._add_line_color(color, True)
+        self.zpl.append('^FS')
 
     @_newline_after
     def add_graphic_field(self, image, width, height=0, dpmm=8, compression_type='A'):
@@ -2272,20 +2271,20 @@ class ZPLDocument(_BaseZPL):
                                  * 'C' - compressed binary
         """
         if not height:
-            height = int(float(image.size[1])/image.size[0]*width)
+            height = int(float(image.size[1]) / image.size[0] * width)
 
-        totalbytes = math.ceil(width*dpmm*height*dpmm/8.0)
-        bytesperrow = math.ceil(width*dpmm/8.0)
+        totalbytes = math.ceil(width * dpmm * height * dpmm / 8.0)
+        bytesperrow = math.ceil(width * dpmm / 8.0)
 
         data = convert_pil_image(image, width, height, dpmm, compression_type=compression_type)
 
         self.zpl.append('^GF')
-        self.add_zpl_raw(compression_type)
+        self.zpl.append(compression_type)
         self._add_int_value_in_range(len(data), 'len data', 1, 99999, True, False)
         self._add_int_value_in_range(int(totalbytes), 'width', 1, 99999, True, False)
         self._add_int_value_in_range(bytesperrow, 'height', 1, 99999, True, False)
         self._add_comma(True)
-        self.add_zpl_raw(data)
+        self.zpl.append(data)
 
     @_newline_after
     def add_printer_sleep(self, sleep_seconds, shutdown_while_queued):
@@ -2301,7 +2300,6 @@ class ZPLDocument(_BaseZPL):
         self.zpl.append('^ZZ')
         self._add_int_value_in_range(sleep_seconds, 'sleep_seconds', 0, 999999, False)
         self._add_yes_no(shutdown_while_queued, 'shutdown_while_queued', True)
-
 
     @property
     def zpl_text(self):

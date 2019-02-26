@@ -1,4 +1,4 @@
-def convert_pil_image(image, width, height, dpmm, compression_type='A'):
+def convert_pil_image(image, width, height, dpmm=8, compression_type='A'):
     """
     Converts PIL.Image to compression type
 
