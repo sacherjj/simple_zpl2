@@ -1,8 +1,7 @@
 import pytest
-from PIL import Image
+import PIL
 
 
 @pytest.fixture
 def image():
-    image = Image.new('1', (1, 1))
-    return image
+    return PIL.Image.new('RGBA', (200, 200))

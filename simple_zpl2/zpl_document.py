@@ -2256,16 +2256,13 @@ class ZPLDocument(_BaseZPL):
         self.zpl.append('^FS')
 
     @_newline_after
-    def add_graphic_field(self, image, width, height=0, dpmm=8, compression_type='A'):
+    def add_graphic_field(self, image, width, height=0, compression_type='A'):
         """
         Produce Graphic Field on Label (^GF)
 
         :param image: PIL image
         :param width: border to 99999
         :param height: border to 99999
-        :param dpmm: * 8  = 200dpi
-                     * 12 = 300dpi
-                     * 24 = 600dpi
         :param compression_type: * 'A' - ASCII hexadecimal
                                  * 'B' - binary
                                  * 'C' - compressed binary
@@ -2273,13 +2270,13 @@ class ZPLDocument(_BaseZPL):
         if not height:
             height = int(float(image.size[1]) / image.size[0] * width)
 
-        totalbytes = math.ceil(width * dpmm * height * dpmm / 8.0)
-        bytesperrow = math.ceil(width * dpmm / 8.0)
+        bytesperrow = math.ceil(width / 8.00)
 
-        data = convert_pil_image(image, width, height, dpmm, compression_type=compression_type)
+        image = convert_pil_image(image, width, height)
+        totalbytes = len(image.tobytes())
+        data = image.tobytes().hex().upper()
 
-        self.zpl.append('^GF')
-        self.zpl.append(compression_type)
+        self.zpl.append('^GF{}'.format(compression_type))
         self._add_int_value_in_range(len(data), 'len data', 1, 99999, True, False)
         self._add_int_value_in_range(int(totalbytes), 'width', 1, 99999, True, False)
         self._add_int_value_in_range(bytesperrow, 'height', 1, 99999, True, False)
