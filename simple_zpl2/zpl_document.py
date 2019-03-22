@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import binascii
 import math
 import requests
 from functools import wraps
@@ -2274,7 +2275,7 @@ class ZPLDocument(_BaseZPL):
 
         image = convert_pil_image(image, width, height)
         totalbytes = len(image.tobytes())
-        data = image.tobytes().hex().upper()
+        data = binascii.hexlify(image.tobytes()).decode().upper()
 
         self.zpl.append('^GF{}'.format(compression_type))
         self._add_int_value_in_range(len(data), 'len data', 1, 99999, True, False)
