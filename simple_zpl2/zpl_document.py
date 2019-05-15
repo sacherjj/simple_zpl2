@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
-from functools import wraps
+import binascii
+import math
 import requests
+from functools import wraps
+
+from simple_zpl2.utils import convert_pil_image
 
 
 def _newline_after(func):
@@ -2234,6 +2238,7 @@ class ZPLDocument(_BaseZPL):
         self._add_int_value_in_range(border, 'border', 1, 32000, True, False)
         self._add_line_color(line_color, True)
         self._add_int_value_in_range(corner_rounding, 'corner_rounding', 0, 8, True, False)
+        self.zpl.append('^FS')
 
     @_newline_after
     def add_graphic_circle(self, diameter=3, border=1, color='B'):
@@ -2249,6 +2254,35 @@ class ZPLDocument(_BaseZPL):
         self._add_int_value_in_range(diameter, 'diameter', 3, 4095, False, True)
         self._add_int_value_in_range(border, 'border', 1, 4095, True, True)
         self._add_line_color(color, True)
+        self.zpl.append('^FS')
+
+    @_newline_after
+    def add_graphic_field(self, image, width, height=0, compression_type='A'):
+        """
+        Produce Graphic Field on Label (^GF)
+
+        :param image: PIL image
+        :param width: border to 99999
+        :param height: border to 99999
+        :param compression_type: * 'A' - ASCII hexadecimal
+                                 * 'B' - binary
+                                 * 'C' - compressed binary
+        """
+        if not height:
+            height = int(float(image.size[1]) / image.size[0] * width)
+
+        bytesperrow = math.ceil(width / 8.00)
+
+        image = convert_pil_image(image, width, height)
+        totalbytes = len(image.tobytes())
+        data = binascii.hexlify(image.tobytes()).decode().upper()
+
+        self.zpl.append('^GF{}'.format(compression_type))
+        self._add_int_value_in_range(len(data), 'len data', 1, 99999, True, False)
+        self._add_int_value_in_range(int(totalbytes), 'width', 1, 99999, True, False)
+        self._add_int_value_in_range(bytesperrow, 'height', 1, 99999, True, False)
+        self._add_comma(True)
+        self.zpl.append(data)
 
     @_newline_after
     def add_printer_sleep(self, sleep_seconds, shutdown_while_queued):
@@ -2264,7 +2298,6 @@ class ZPLDocument(_BaseZPL):
         self.zpl.append('^ZZ')
         self._add_int_value_in_range(sleep_seconds, 'sleep_seconds', 0, 999999, False)
         self._add_yes_no(shutdown_while_queued, 'shutdown_while_queued', True)
-
 
     @property
     def zpl_text(self):

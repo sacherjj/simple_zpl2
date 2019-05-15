@@ -18,7 +18,6 @@ Planned for Implementation
 * ^FW - Field Orientation
 * ^GC - Graphic Diagonal Line
 * ^GE - Graphic Ellipse
-* ^GF - Graphic Field
 * ^GS - Graphic Symbol
 * ~HI - Host Identification
 * ~HQ - Host Query

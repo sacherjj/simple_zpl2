@@ -5,23 +5,23 @@ from simple_zpl2 import ZPLDocument
 def test_graphic_box():
     zdoc = ZPLDocument()
     zdoc.add_graphic_box(3000)
-    assert(zdoc.zpl_bytes == b'^XA\n^GB3000,1,1,B,0\n^XZ')
+    assert(zdoc.zpl_bytes == b'^XA\n^GB3000,1,1,B,0^FS\n^XZ')
 
     zdoc = ZPLDocument()
     zdoc.add_graphic_box(3000, 300)
-    assert(zdoc.zpl_bytes == b'^XA\n^GB3000,300,1,B,0\n^XZ')
+    assert(zdoc.zpl_bytes == b'^XA\n^GB3000,300,1,B,0^FS\n^XZ')
 
     zdoc = ZPLDocument()
     zdoc.add_graphic_box(3000, 300, 3)
-    assert(zdoc.zpl_bytes == b'^XA\n^GB3000,300,3,B,0\n^XZ')
+    assert(zdoc.zpl_bytes == b'^XA\n^GB3000,300,3,B,0^FS\n^XZ')
 
     zdoc = ZPLDocument()
     zdoc.add_graphic_box(3000, 300, 3, 'W')
-    assert(zdoc.zpl_bytes == b'^XA\n^GB3000,300,3,W,0\n^XZ')
+    assert(zdoc.zpl_bytes == b'^XA\n^GB3000,300,3,W,0^FS\n^XZ')
 
     zdoc = ZPLDocument()
     zdoc.add_graphic_box(3000, 300, 3, 'W', 6)
-    assert(zdoc.zpl_bytes == b'^XA\n^GB3000,300,3,W,6\n^XZ')
+    assert(zdoc.zpl_bytes == b'^XA\n^GB3000,300,3,W,6^FS\n^XZ')
 
 
 def test_graphic_box_errors():
