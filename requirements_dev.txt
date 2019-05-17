@@ -3,11 +3,11 @@ bumpversion==0.5.3
 wheel==0.32.3
 watchdog==0.9.0
 flake8==3.7.7
-tox==3.7.0
+tox==3.11.1
 coverage==4.5.3
 Sphinx==1.8.3
 cryptography==2.5
 PyYAML==5.1
 pytest==4.1.1
 requests==2.22.0
-Pillow==5.4.1
+Pillow==6.0.0
