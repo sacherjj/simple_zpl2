@@ -24,7 +24,7 @@ def test_add_font_orientation(orientation):
 
 
 @pytest.mark.parametrize("orientation", ("F", "r", "", 7))
-def test_add_font_orientation_with_invalid_orientation(orientation):
+def test_add_font_with_invalid_orientation(orientation):
     with pytest.raises(ValueError):
         zdoc = ZPLDocument()
         zdoc.add_font("A", orientation)
@@ -38,7 +38,7 @@ def test_add_font_height(height):
 
 
 @pytest.mark.parametrize("height", (9, 32001, "ABC"))
-def test_add_font_height_with_invalid_height(height):
+def test_add_font_with_invalid_height(height):
     with pytest.raises(ValueError):
         zdoc = ZPLDocument()
         zdoc.add_font("A", "N", height)
@@ -52,7 +52,7 @@ def test_add_font_width(width):
 
 
 @pytest.mark.parametrize("width", (9, 32001, "ABC"))
-def test_add_font_width_with_invalid_width(width):
+def test_add_font_with_invalid_width(width):
     with pytest.raises(ValueError):
         zdoc = ZPLDocument()
         zdoc.add_font("A", "N", 20, width)
