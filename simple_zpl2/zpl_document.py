@@ -2000,7 +2000,7 @@ class ZPLDocument(_BaseZPL):
 
         if orientation is None:
             return
-        self._add_orientation(orientation, True)
+        self._add_orientation(orientation, False)
 
         if character_height is None:
             return
