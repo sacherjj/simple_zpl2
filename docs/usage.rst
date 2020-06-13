@@ -15,6 +15,7 @@ To use Simple ZPL2 in a project::
     # Each label is built with a ZPLDocument object
     zdoc = ZPLDocument()
     zdoc.add_comment("Barcode and text")
+    # zdoc.add_zpl_raw('^BY3')  # example of custom command; this ^BY command allows to change barcode width (default is 2, range is 1-10)
     zdoc.add_field_origin(20, 20)
     code128_data = 'TEST BARCODE'
     bc = Code128_Barcode(code128_data, 'N', 30, 'Y')
