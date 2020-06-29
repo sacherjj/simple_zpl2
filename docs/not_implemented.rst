@@ -8,6 +8,7 @@ using the `add_zpl_raw()` method.
 Planned for Implementation
 --------------------------
 
+* ^BY - Width of the barocdes after it as described on https://stackoverflow.com/questions/6987443/zpl-how-can-we-increase-width-of-bc-code-128-bar-code
 * ^CC/~CC - Change Caret
 * ^CD/~CD - Change Delimiter
 * ^CT/~CT - Change Tilde
