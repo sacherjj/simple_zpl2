@@ -21,7 +21,6 @@ def _newline_after(func):
 
 
 class _BaseZPL(object):
-
     # TODO: Break out '^', '~', and ',' because can be changed
 
     _START = '^XA'
@@ -195,7 +194,6 @@ class _BaseZPL(object):
 
 
 class _Barcode(_BaseZPL):
-
     _CODE39_SET = '01234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ-.$/+% '
 
     def __init__(self, data):
@@ -1394,7 +1392,7 @@ class DataMatrix_Barcode(_Barcode):
                  rows=None, format_id=None, escape_sequence=None, aspect_ratio=None):
         super().__init__(data)
         self._initial_setup(orientation, height, quality, columns,
-                           rows, format_id, escape_sequence, aspect_ratio)
+                            rows, format_id, escape_sequence, aspect_ratio)
         # TODO: Validation of data
         self._add_field_data(data)
 
@@ -1974,7 +1972,6 @@ class ZPLDocument(_BaseZPL):
         if len(value) != 1:
             return False
         return value.isdigit()
-
 
     @_newline_after
     def add_font(self, font_name, orientation=None, character_height=None,
