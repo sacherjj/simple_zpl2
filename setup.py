@@ -13,13 +13,9 @@ requirements = [
     'requests'
 ]
 
-test_requirements = [
-    # TODO: put package test requirements here
-]
-
 setup(
     name='simple_zpl2',
-    version='0.2.2',
+    version='0.3.0',
     description="For building ZPL2 strings for printing barcodes with Zebra or compatible label printers.",
     long_description=readme + '\n\n' + history,
     author="Joe Sacher",
@@ -50,7 +46,7 @@ setup(
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
     ],
-    test_suite='tests',
-    tests_require=test_requirements
 )
