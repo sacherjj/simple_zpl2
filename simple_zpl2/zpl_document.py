@@ -1761,7 +1761,11 @@ class QR_Barcode(_Barcode):
     """
 
     def __init__(self, data, model=None, magnification=None, error_correction=None, mask_value=None):
-        # TODO: FD data QR switches
+        # FD data QR switches
+        if fd_switches is None:
+            data = 'MM,A{}'.format(data)
+        else:
+            data = '{}{}'.format(fd_switches, data)
         super().__init__(data)
         self._initial_setup(model, magnification, error_correction, mask_value)
         self._add_data()
