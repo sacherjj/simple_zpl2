@@ -1761,7 +1761,11 @@ class QR_Barcode(_Barcode):
     """
 
     def __init__(self, data, model=None, magnification=None, error_correction=None, mask_value=None):
-        # TODO: FD data QR switches
+        # FD data QR switches
+        if fd_switches is None:
+            data = 'MM,A{}'.format(data)
+        else:
+            data = '{}{}'.format(fd_switches, data)
         super().__init__(data)
         self._initial_setup(model, magnification, error_correction, mask_value)
         self._add_data()
@@ -2236,7 +2240,27 @@ class ZPLDocument(_BaseZPL):
         self._add_line_color(line_color, True)
         self._add_int_value_in_range(corner_rounding, 'corner_rounding', 0, 8, True, False)
         self.zpl.append('^FS')
+        
+    @_newline_after
+    def add_graphic_diagnonal_line(self, width=1, height=1, border=1, line_color='B', orientation='L'):
+        """
+        Produce Diagonal Line on Label (^GD)
 
+        :param width: border to 32000
+        :param height: border to 32000
+        :param border: 1 to 32000
+        :param line_color: * 'B' - black
+                           * 'W' - white
+        :param orientation: 'L' for left-leaning diagonal (\) (default) , 'R' for right-leaning diagonal (/)
+        """
+        self.zpl.append('^GD')
+        self._add_int_value_in_range(width, 'width', border, 32000, False, False)
+        self._add_int_value_in_range(height, 'height', border, 32000, True, False)
+        self._add_int_value_in_range(border, 'border', 1, 32000, True, False)
+        self._add_line_color(line_color, True)
+        self._add_value_in_list(orientation, 'orientation', ('L','R',), True)
+        self.zpl.append('^FS')
+        
     @_newline_after
     def add_graphic_circle(self, diameter=3, border=1, color='B'):
         """
