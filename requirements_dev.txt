@@ -9,5 +9,5 @@ Sphinx==3.1.1
 cryptography==41.0.1
 PyYAML==5.4.1
 pytest==5.2.0
-requests==2.31.0
+requests==2.32.3
 Pillow==9.5.0
