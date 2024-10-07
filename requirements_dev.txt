@@ -10,4 +10,4 @@ cryptography==43.0.1
 PyYAML==5.4.1
 pytest==5.2.0
 requests==2.32.3
-Pillow==9.5.0
+Pillow==10.4.0
