@@ -149,12 +149,12 @@ class _BaseZPL(object):
     @staticmethod
     def _format_field_data(data, replace_newlines):
         if replace_newlines:
-            data = data.replace('\n', '\&')
+            data = data.replace('\n', '\\&')
         return data
 
     @_newline_after
     def _add_field_data(self, data_list, replace_newlines=False):
-        """
+        r"""
         Field Data for Text or Barcode (^FD with 1-many ^FS)
 
         :param data_list:  if list or tuple, multiple data blocks with '^FS' separator
@@ -1297,7 +1297,7 @@ class UPSMaxicode_Barcode(_Barcode):
 
 
 class DataMatrix_Barcode(_Barcode):
-    """
+    r"""
     Data Matrix Bar Code (^BX)
 
     :param orientation: * 'N' - normal
@@ -2043,7 +2043,7 @@ class ZPLDocument(_BaseZPL):
                               text_justification, hanging_indent)
 
     def add_field_data(self, data_list, replace_newlines=False):
-        """
+        r"""
         Field Data for Text or Barcode (^FD with 1-many ^FS)
 
         :param data_list:  if list or tuple, multiple data blocks with '^FS' separator
@@ -2234,10 +2234,10 @@ class ZPLDocument(_BaseZPL):
         self._add_line_color(line_color, True)
         self._add_int_value_in_range(corner_rounding, 'corner_rounding', 0, 8, True, False)
         self.zpl.append('^FS')
-        
+
     @_newline_after
     def add_graphic_diagnonal_line(self, width=1, height=1, border=1, line_color='B', orientation='L'):
-        """
+        r"""
         Produce Diagonal Line on Label (^GD)
 
         :param width: border to 32000
@@ -2254,7 +2254,7 @@ class ZPLDocument(_BaseZPL):
         self._add_line_color(line_color, True)
         self._add_value_in_list(orientation, 'orientation', ('L','R',), True)
         self.zpl.append('^FS')
-        
+
     @_newline_after
     def add_graphic_circle(self, diameter=3, border=1, color='B'):
         """
